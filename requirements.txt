@@ -1,8 +1,8 @@
 streamlit
 langchain
 langchain-groq
-pyttsx3
 python-docx
 PyPDF2
 openpyxl
 python-dotenv
+gtts

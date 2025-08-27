@@ -1,0 +1,63 @@
+Unit: LLMs & Generative AI
+
+LONG-ANSWER:
+1. Q: Explain the role of prompt engineering in LLM performance and how you would apply it to improve the diet planner app.
+ A: Prompt engineering shapes the context and constraints the model receives, directly influencing accuracy and relevance. For the diet planner, I would start by defining a clear prompt template that includes user goals, dietary restrictions, and health metrics. I would then iterate on the wording to reduce ambiguity, using few-shot examples of successful meal plans. Adding a system message that sets the tone (e.g., "You are a nutritionist assistant") helps the model stay on task. Finally, I would evaluate outputs against a validation set and fine‑tune the prompt until the generated plans consistently meet nutritional guidelines.
+
+2. Q: Jakir built an intelligent document parsing pipeline using ChatGPT. Describe how you would integrate a custom fine‑tuned LLM for Japanese‑to‑English translation and summarization, ensuring low latency.
+ A: First, fine‑tune a multilingual transformer (e.g., mT5) on a parallel corpus of Japanese PDFs and their English summaries. Deploy the model on a GPU‑optimized edge server or use a serverless function with GPU support to keep inference latency under 200 ms. Wrap the model in a LangChain chain that first extracts text via OCR, then passes it to the translation sub‑chain, and finally to the summarization sub‑chain. Cache intermediate results in Redis to avoid repeated translation of the same document. Use batching for concurrent requests and monitor latency with Prometheus to trigger scaling when needed.
+
+3. Q: You need to deploy a LangChain‑based chatbot for the portfolio manager reporting system. Outline the steps to set up the chain, including data retrieval, prompt template, and response formatting.
+ A: 1) Create a data retriever that queries Snowflake for the latest portfolio metrics and stores them in a vector store. 2) Define a prompt template that inserts the retrieved metrics into a structured question‑answer format. 3) Build a LangChain chain that first calls the retriever, then feeds the context into the LLM with the prompt template. 4) Post‑process the LLM output to format it as an HTML table using great_tables. 5) Expose the chain via a FastAPI endpoint and schedule daily runs to email the formatted report to managers.
+
+4. Q: Discuss the trade‑offs between using a hosted LLM service like Groq vs. self‑hosting a transformer model for real‑time fraud detection.
+ A: Hosted services offer instant scalability, lower maintenance, and often better latency due to edge deployment, but they come with vendor lock‑in and recurring costs. Self‑hosting gives full control over data privacy, model customization, and the ability to fine‑tune on proprietary fraud patterns, but requires GPU infrastructure, continuous monitoring, and model drift mitigation. For real‑time fraud detection, latency is critical; Groq’s low‑latency inference can be a decisive advantage. However, if the fraud data is highly sensitive, self‑hosting ensures compliance with data residency regulations. A hybrid approach—using a hosted model for baseline detection and a local fine‑tuned model for edge cases—can balance cost and control.
+
+5. Q: Jakir wants to add a feature to automatically generate personalized churn prediction insights using LLMs. How would you design the data pipeline and LLM prompt to produce actionable recommendations?
+ A: Collect churn‑risk scores from the Random Forest model and enrich them with user activity logs, segmentation tags, and historical retention metrics. Store the enriched records in a Snowflake table and expose them via a vector store keyed by user ID. Build a LangChain prompt that includes the user’s churn probability, key behavioral drivers, and a request for actionable steps (e.g., targeted offers). The LLM generates a concise recommendation, which is then formatted into a dashboard widget and emailed to the PM. Validate the recommendations against A/B test results to refine the prompt.
+
+6. Q: Explain how to use MCP (Model Context Protocol) to manage context length when generating long‑form content for the resume builder app.
+ A: MCP allows you to chunk large documents into manageable pieces and maintain a hierarchical context. First, split the user’s LinkedIn profile and job descriptions into sections (education, experience, skills). Encode each section into embeddings and store them in a vector index. When generating a resume, retrieve the top‑k relevant sections and feed them to the LLM as a concatenated prompt, ensuring the total token count stays below the model’s limit. Use MCP’s context‑window management to keep the most recent or most relevant chunks active while discarding older ones. This approach preserves coherence without exceeding token limits.
+
+7. Q: Compare the effectiveness of LSTM‑based sequence models vs. transformer‑based models for time‑series prediction in asset management.
+ A: LSTMs capture temporal dependencies with gated recurrent units but struggle with long‑range patterns and parallelization. Transformers, with self‑attention, model global dependencies efficiently and scale better on GPUs, leading to higher accuracy on complex market data. For asset management, where latency and interpretability matter, LSTMs can be faster to train on small datasets, but transformers outperform them on large, multi‑asset time series. Additionally, transformers support multi‑head attention, enabling simultaneous modeling of price, volume, and sentiment streams. In practice, a hybrid approach—using LSTM for short‑term trends and transformer for long‑term forecasting—often yields the best results.
+
+8. Q: Jakir has a dataset of user interaction logs. How would you use an LLM to detect anomalous behavior patterns that could indicate fraud?
+ A: First, preprocess logs to extract features such as session duration, click sequences, and transaction amounts. Train a lightweight autoencoder or clustering model to learn normal behavior patterns. Feed the reconstructed anomaly scores into a prompt that asks the LLM to interpret the score and suggest potential fraud indicators. The LLM can then generate a concise report highlighting suspicious actions (e.g., rapid account changes). Integrate this report into the fraud detection dashboard and trigger alerts for manual review.
+
+9. Q: Describe how to fine‑tune a Hugging Face model on a custom dataset of Japanese PDFs for summarization, including tokenization, training loop, and evaluation.
+ A: Download a pre‑trained multilingual model (e.g., mBART). Use the `datasets` library to load the PDF text and target summaries, then apply the model’s tokenizer with `tokenizer.pad_token` set appropriately. Create a `DataCollatorForSeq2Seq` to batch inputs and labels. Define a training loop with `Trainer`, specifying `learning_rate`, `num_train_epochs`, and `warmup_steps`. Evaluate using ROUGE‑L on a held‑out validation set after each epoch. Save the best checkpoint and optionally distill it for faster inference.
+
+10. Q: What are the ethical considerations when deploying generative AI for customer engagement platforms like CleverTap?
+ A: First, ensure transparency by disclosing that content is AI‑generated to avoid deceptive practices. Second, guard against bias by auditing prompts and training data for demographic fairness. Third, protect user privacy by anonymizing personal data before feeding it to the model. Fourth, implement rate limits and monitoring to prevent spam or manipulation of engagement metrics. Finally, provide users with an opt‑out mechanism and clear data usage policies to comply with regulations such as GDPR.
+
+SHORT-ANSWER:
+1. Q: What is the primary advantage of using LangChain for building LLM applications?
+ A: It abstracts LLM interactions into reusable chains, simplifying integration of retrieval, prompting, and post‑processing.
+
+2. Q: Which Python library did Jakir use for database integration in his data pipelines?
+ A: SQLAlchemy.
+
+3. Q: Name one technique Jakir used for menu engineering at Voosh Food Tech.
+ A: Levenshtein Distance for pattern matching.
+
+4. Q: Which cloud platform did Jakir use for AutoML?
+ A: Google Vertex AI.
+
+5. Q: What is the purpose of the Model Context Protocol (MCP)?
+ A: To manage and chunk large contexts so LLMs stay within token limits while preserving coherence.
+
+6. Q: Which LLM framework did Jakir employ in his diet planner app?
+ A: Groq.
+
+7. Q: Jakir used which tool for web scraping in his freelance projects?
+ A: Selenium and Beautiful Soup.
+
+8. Q: What metric did Jakir use to measure success of the retention engine?
+ A: F‑score.
+
+9. Q: Which visualization tool did Jakir automate dashboards with at Alternative Path?
+ A: Power BI.
+
+10. Q: Jakir's resume builder app uses which open‑source library for UI?
+ A: Streamlit.

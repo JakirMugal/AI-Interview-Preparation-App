@@ -1,0 +1,66 @@
+Unit: Data Scientist (WitZeal)
+
+LONG-ANSWER:
+1. Q: Jakir, you built a retention engine at WitZeal using K‑Means clustering and bonus allocation logic. Describe the end‑to‑end pipeline you would design for such a system, including data ingestion, feature engineering, clustering, and how you would evaluate its impact on user retention.
+ A: I would start by ingesting user activity logs from the app’s event store (Kafka/Firestore) and enrich them with demographic data from the CRM. Feature engineering would involve session length, frequency, in‑app purchases, and engagement scores, normalised via MinMax scaling. Using PyCluster, I’d run K‑Means to segment users into 4–5 clusters based on behavioral similarity. For each cluster, I’d define a bonus policy (e.g., higher cashback for high‑risk churn clusters). The engine would assign bonuses in real time via a microservice. Impact is measured by comparing 30‑day retention F‑score before and after deployment, targeting a 15–22% lift as achieved previously.
+
+2. Q: Explain how you implemented fraud detection for cashback bonuses at WitZeal. What features did you engineer, which models did you try, and how did you validate the model’s effectiveness?
+ A: I engineered features such as transaction frequency, average cashback amount, device fingerprint, IP geolocation, and time‑of‑day patterns. I experimented with Isolation Forest, Gradient Boosting, and a custom rule‑based ensemble. After hyperparameter tuning, a Gradient Boosting model achieved 0.93 AUC on the validation set. I validated effectiveness by deploying it in a shadow mode, comparing flagged transactions against manual reviews, and measuring a 30% reduction in fraudulent claims over three months.
+
+3. Q: Your churn predictor v2 at WitZeal segmented users before predicting churn. Walk through the steps you took to create these segments and how you incorporated them into the Random Forest model.
+ A: First, I performed unsupervised clustering on user behavior (sessions, feature usage, support tickets) using K‑Means to identify 6 distinct segments. I encoded segment membership as a categorical feature and added it to the feature set. The Random Forest was trained on a balanced dataset (SMOTE) with 100 trees, tuned via GridSearchCV. I evaluated using ROC‑AUC and precision‑recall curves, achieving a 0.88 AUC and reducing churn by 40% in production.
+
+4. Q: Describe how you automated Power BI dashboards for retention and engagement reports. What Python libraries did you use, and how did you schedule and deliver the dashboards to product managers?
+ A: I used the `pandas` and `pyodbc` libraries to pull data from Snowflake, performed aggregation, and exported the results to CSV. With `powerbi-client`, I programmatically refreshed datasets and published reports. I scheduled the script via Airflow DAGs to run nightly, and used `smtplib` to email PMs a PDF snapshot of the dashboard with a link to the live Power BI workspace, saving them an hour of manual reporting each day.
+
+5. Q: Jakir, you have experience with LLMs and prompt engineering. How would you integrate a generative AI model into a customer support chatbot for WitZeal, ensuring compliance with data privacy regulations?
+ A: I’d deploy a fine‑tuned GPT‑4 model on Vertex AI, using LangChain to orchestrate prompt templates that mask PII. The chatbot would first run a privacy filter that scans user input for sensitive data, replacing it with placeholders before passing to the LLM. Responses would be post‑processed to remove any accidental leakage. All logs would be stored in an encrypted Snowflake table, with access governed by role‑based permissions, ensuring GDPR and CCPA compliance.
+
+6. Q: Explain the multi‑source scraping pipeline you built at Alternative Path Pvt. Ltd. How did you handle API rate limits, HTML parsing, and data consistency across different sources?
+ A: I designed a modular Scrapy spider that used Playwright for dynamic pages and Requests for static APIs. Rate limits were respected via a token bucket algorithm, with exponential backoff on 429 responses. For HTML parsing, I used BeautifulSoup with CSS selectors and regex to extract fields. I normalised data into a unified schema, then used SQLAlchemy ORM to insert into PostgreSQL, employing upsert logic to maintain consistency and avoid duplicates.
+
+7. Q: Your menu engineering algorithm at Voosh Food Tech used Levenshtein distance. How did you combine this with NLP techniques to improve menu item matching accuracy?
+ A: I first tokenised menu titles and applied stemming to reduce noise. Levenshtein distance was computed between user‑entered search terms and canonical menu items. To capture semantic similarity, I embedded titles using a pre‑trained Sentence‑BERT model and calculated cosine similarity. The final similarity score was a weighted sum of edit distance and semantic similarity, tuned via cross‑validation, achieving 82% accuracy.
+
+8. Q: Discuss how you used AutoML and Google Vertex AI in your projects. Provide an example of a problem you solved using AutoML and the steps you followed from data preparation to model deployment.
+ A: For a sales forecasting task, I uploaded cleaned CSV data to Vertex AI’s AutoML Tables. I defined the target column, selected feature importance, and let AutoML generate a pipeline of preprocessing, feature engineering, and model training. After reviewing the top 5 models, I deployed the best one as a REST endpoint. I then integrated the endpoint into a Streamlit dashboard, allowing stakeholders to input new data and receive predictions in real time.
+
+9. Q: Jakir, you have built dashboards using Google Data Studio and Power BI. Compare the strengths and weaknesses of these tools for a data science team, and explain when you would choose one over the other.
+ A: Google Data Studio excels at quick, web‑based visualisations with native connectors to BigQuery and Sheets, ideal for lightweight reporting. Power BI offers richer visual components, advanced DAX calculations, and better offline capabilities. I choose Data Studio for rapid stakeholder demos and Power BI when complex data modelling or enterprise‑grade security is required.
+
+10. Q: Describe how you performed sentiment analysis as part of downstream data enrichment at Alternative Path. Which libraries did you use, and how did you integrate the sentiment scores into the database?
+ A: I used the `transformers` library with a pre‑trained BERT‑based sentiment model to score text fields. Sentiment scores were normalised to a 0–1 scale and appended to the original record. Using SQLAlchemy, I performed bulk inserts into a Snowflake table, adding a `sentiment_score` column. I then created a view that aggregated sentiment by user segment for downstream analytics.
+
+11. Q: Jakir, explain how you used the Apriori algorithm at Voosh Food Tech for combo analysis. What were the key parameters, and how did the insights translate into business decisions?
+ A: I set the minimum support to 0.01 and minimum confidence to 0.6 to capture frequent itemsets. After generating association rules, I identified high‑confidence combos like ‘Burger + Fries + Soda’. These insights were shared with the menu team, leading to a 4% increase in combo sales by promoting the identified bundles.
+
+SHORT-ANSWER:
+1. Q: Which Python library did you use for building Random Forest models at WitZeal?
+ A: Scikit‑learn.
+
+2. Q: What database did you primarily use for storing processed data at Alternative Path?
+ A: PostgreSQL and Snowflake.
+
+3. Q: Name one BI tool you used to automate dashboards for product managers.
+ A: Power BI.
+
+4. Q: Which LLM framework did you employ for prompt engineering?
+ A: LangChain.
+
+5. Q: What technique did you use to handle missing values in your churn predictor?
+ A: SMOTE for oversampling.
+
+6. Q: Which web scraping tool did you use for dynamic pages?
+ A: Playwright.
+
+7. Q: What metric did you use to evaluate the fraud detection model?
+ A: AUC‑ROC.
+
+8. Q: Which cloud platform hosts your Vertex AI AutoML models?
+ A: Google Cloud.
+
+9. Q: What algorithm did you use for menu item matching?
+ A: Levenshtein distance.
+
+10. Q: Which library did you use to generate HTML tables for email reports?
+ A: great_tables.

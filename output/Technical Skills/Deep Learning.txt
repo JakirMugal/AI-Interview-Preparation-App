@@ -1,63 +1,63 @@
 Unit: Deep Learning
 
 LONG-ANSWER:
-1. Q: Explain the differences between CNN, RNN, and Transformer architectures and when you would choose each for a given problem.
- A: CNNs excel at spatial feature extraction, making them ideal for image classification, object detection, and video frame analysis. RNNs, especially LSTMs and GRUs, capture temporal dependencies in sequential data such as text or time series, but suffer from vanishing gradients and slower training. Transformers use self‑attention to model long‑range dependencies efficiently, enabling state‑of‑the‑art performance in NLP, machine translation, and even vision tasks when paired with vision‑transformer backbones. Choose CNNs for spatial tasks, RNNs for moderate‑length sequences with limited context, and Transformers for long‑range, parallelizable sequence modeling.
+1. Q: Explain how you would design a transformer-based model for time‑series forecasting in your diet planner app. Include architecture and training steps.
+ A: Use a 1‑D temporal transformer: embed each time step with a linear layer, add positional encodings, stack 4 encoder layers with multi‑head self‑attention, and a final linear head to predict next‑day nutrient values. Train with AdamW, learning rate 1e‑4, and use a sliding window of 30 days as input. Apply teacher forcing during training and evaluate with MAE. Deploy via Groq for low‑latency inference.
 
-2. Q: Describe how the attention mechanism works in Transformers and why it is beneficial for sequence‑to‑sequence tasks.
- A: Attention computes a weighted sum of value vectors, where weights are derived from similarity scores between query and key vectors. This allows each token to attend to all others, capturing global context without recurrence. In sequence‑to‑sequence tasks, attention aligns source and target tokens, improving alignment quality and enabling parallel decoding. It also mitigates the fixed‑size hidden state bottleneck of RNNs, leading to better handling of long sentences and more efficient training.
+2. Q: In your AI School Management project you used OpenCV for attendance. How would you integrate a CNN for face recognition and what preprocessing steps are critical?
+ A: First detect faces with Haar cascades, crop and resize to 224×224, normalize pixel values, and augment with random flips and brightness changes. Feed the preprocessed images into a pre‑trained ResNet‑50 fine‑tuned on the school’s face dataset. Use cosine similarity on the embedding layer for identity matching. Store embeddings in PostgreSQL for quick lookup during attendance logging.
 
-3. Q: You are tasked with building a fraud detection model for cashback bonuses. How would you design a deep learning pipeline, including data preprocessing, model selection, and evaluation metrics?
- A: First, clean and engineer features: encode categorical fields, normalize numeric values, and generate behavioral embeddings from user activity logs. Use a balanced sampling strategy or focal loss to address class imbalance. For the model, a hybrid architecture combining a shallow feed‑forward network for static features and an LSTM or Transformer encoder for sequential behavior is effective. Evaluate with precision‑recall curves, F1‑score, and ROC‑AUC, and perform cross‑validation to ensure robustness across user segments.
+3. Q: Describe the process of fine‑tuning a large language model (LLM) using LangChain for generating personalized diet plans. Include data preparation, prompt design, and evaluation metrics.
+ A: Collect user profiles (age, weight, goals) and nutrition guidelines into a JSON dataset. Use LangChain’s PromptTemplate to embed user data into a prompt like "Given {profile}, recommend a 7‑day meal plan adhering to {guidelines}." Fine‑tune a GPT‑4o model on this prompt–response pair set with LoRA adapters. Evaluate with BLEU for text similarity, domain‑specific ROUGE for coverage, and a human‑rated nutrition compliance score.
 
-4. Q: In your AI Video Processing project, you implemented background/foreground estimation. Explain how you used convolutional networks for this task and how you handled real‑time constraints.
- A: I employed a lightweight U‑Net variant with depthwise separable convolutions to segment each frame into foreground and background masks. To meet real‑time constraints, I reduced the input resolution, used TensorRT for inference optimization, and processed frames in a sliding window to reuse feature maps. The model was quantized to 8‑bit and deployed on a GPU‑enabled edge device, achieving ~30 FPS while maintaining >90% IoU on validation videos.
+4. Q: You built a churn predictor using Random Forest. How would you replace it with an LSTM‑based sequence model to capture user behavior over time? Outline data pipeline and loss function.
+ A: Transform user logs into sequences of one‑hot encoded events per day. Pad sequences to a fixed length (e.g., 60 days). Feed into an embedding layer followed by two stacked LSTM layers (128 units each). Use a sigmoid output and binary cross‑entropy loss. Train with early stopping on validation AUC. This captures temporal dependencies that Random Forest cannot.
 
-5. Q: You used LLMs and LangChain to build a diet planner. Discuss how you integrated prompt engineering and model context protocol (MCP) to generate personalized diet plans.
- A: I crafted modular prompts that first gather user preferences, then request a nutritional summary, and finally ask for meal suggestions. Using LangChain’s chain of thought, each sub‑prompt is executed sequentially, and the outputs are fed back into the next prompt. MCP was employed to store user context across sessions, allowing the model to recall past dietary choices and adjust recommendations. This approach reduced hallucinations and improved plan relevance.
+5. Q: In the fraud detection pipeline for cashback bonuses, you used behavioral pattern recognition. How could a graph neural network improve detection? Explain graph construction and message passing.
+ A: Construct a user‑transaction graph where nodes are users and transactions, edges represent transaction flows. Encode node features with user demographics and transaction amounts. Apply a GraphSAGE layer to aggregate neighbor information, capturing collusive patterns. Use a final MLP to predict fraud probability. This captures higher‑order relationships beyond pairwise behavior.
 
-6. Q: Explain the role of encoder‑decoder architecture in machine translation and how you would adapt it for a domain‑specific translation task such as translating medical reports.
- A: The encoder compresses the source sentence into contextual embeddings, while the decoder generates the target sentence token by token, attending to encoder outputs. For medical translation, I would fine‑tune a pre‑trained encoder‑decoder on a curated corpus of medical documents, incorporate domain‑specific terminology via a custom vocabulary, and apply a constrained decoding strategy to preserve critical terms. Additionally, I would use a domain‑adapted tokenizer and add a post‑processing step to correct any medical jargon errors.
+6. Q: Discuss how you would implement attention mechanisms in a sequence‑to‑sequence model for translating Japanese PDFs to English summaries. What are the benefits over vanilla seq2seq?
+ A: Add a Bahdanau attention layer between the encoder LSTM and decoder LSTM, computing context vectors as weighted sums of encoder hidden states. This allows the decoder to focus on relevant source tokens, improving alignment and reducing exposure bias. Compared to vanilla seq2seq, attention yields higher BLEU scores and better handling of long documents.
 
-7. Q: Describe how you would use time series prediction with LSTM for forecasting asset management portfolio returns, including handling of seasonality and external features.
- A: I would construct a multivariate LSTM that ingests past returns, volatility, macro indicators, and calendar features (month, quarter). Seasonal patterns are captured by feeding lagged seasonal terms or using a seasonal decomposition layer before the LSTM. External features are concatenated to the LSTM output before the final dense layer. I would train with a mean‑squared error loss and evaluate using directional accuracy and mean absolute percentage error.
+7. Q: Your automated reporting uses great_tables and email. Suppose you need to generate real‑time dashboards with live model predictions. Which deep learning framework would you choose and why? Discuss deployment considerations.
+ A: Choose TensorFlow Lite for edge inference due to its lightweight runtime and support for quantization, which reduces latency on the server that feeds the Streamlit dashboard. Deploy the model as a REST endpoint behind a FastAPI server, cache predictions in Redis, and stream updates to the dashboard via WebSocket for real‑time interactivity.
 
-8. Q: You built a churn predictor using Random Forest. How would you transition to a deep learning model, and what advantages or challenges would you expect?
- A: Transitioning involves encoding categorical variables with embeddings, normalizing numeric features, and feeding them into a feed‑forward network or a tabular transformer. Advantages include capturing non‑linear interactions automatically and scaling to larger feature sets. Challenges are increased training time, risk of overfitting on small datasets, and the need for careful hyperparameter tuning and regularization such as dropout or weight decay.
+8. Q: Explain the role of data augmentation in training a CNN for license plate detection in your parking system. Provide specific augmentation techniques and their impact on model robustness.
+ A: Apply random rotations (±15°), scaling (0.9–1.1), brightness jitter, Gaussian blur, and horizontal flips to mimic camera variations. Augmentation increases the effective dataset size, reduces overfitting, and improves recall on occluded or low‑light plates by 8–10% as measured on a held‑out validation set.
 
-9. Q: Explain the concept of transfer learning in deep learning and give an example of how you applied it in your AI School Management project.
- A: Transfer learning reuses a pre‑trained model’s weights as a starting point for a new task, reducing data and compute requirements. In AI School Management, I fine‑tuned a pre‑trained ResNet on a small dataset of classroom images to detect attendance via face recognition. By freezing early layers and training only the final classifier, I achieved >95% accuracy with only a few hundred labeled images.
+9. Q: You have experience with Groq for inference. Compare Groq inference with GPU inference for transformer models in terms of latency and throughput. When would you choose each?
+ A: Groq offers sub‑millisecond latency for small to medium transformer models due to its custom tensor‑core architecture, but throughput drops for very large models. GPUs excel at high‑throughput batch inference and support larger models. Use Groq for real‑time API responses; use GPUs for batch training or large‑scale inference jobs.
 
-10. Q: Discuss how you would evaluate and compare multiple deep learning models for a classification task, including metrics, validation strategies, and computational considerations.
- A: I would split data into training, validation, and test sets, using stratified k‑fold cross‑validation to estimate generalization. Key metrics include accuracy, precision, recall, F1‑score, and ROC‑AUC, with confusion matrices for error analysis. I would also record training time, GPU memory usage, and inference latency. Models would be compared using statistical tests (e.g., paired t‑test) on validation scores to ensure observed differences are significant.
+10. Q: In your resume builder AI, you generate resumes from LinkedIn data. How would you use a transformer encoder to encode job descriptions and match them with user skills? Detail the embedding strategy and similarity metric.
+ A: Tokenize job descriptions and user skill lists, feed them into a pre‑trained BERT encoder to obtain CLS embeddings. Compute cosine similarity between job and skill embeddings; rank skills by similarity to recommend the most relevant ones. Fine‑tune the encoder on a small set of manually matched job‑skill pairs to improve domain specificity.
 
 SHORT-ANSWER:
-1. Q: What is the main advantage of using a Transformer over an RNN?
- A: Transformers allow parallel processing of sequence elements and capture long‑range dependencies via self‑attention, leading to faster training and better performance on long sequences.
+1. Q: What activation function is commonly used in the output layer of a binary classification CNN?
+ A: Sigmoid.
 
-2. Q: Name two common techniques to mitigate overfitting in deep learning.
- A: Dropout and L2 weight decay (regularization).
+2. Q: Which optimizer is best suited for training large language models?
+ A: AdamW.
 
-3. Q: Which library did you use for building CNNs in your projects?
- A: PyTorch and TensorFlow (Keras) were used for CNN implementations.
+3. Q: Name one library you used for building data pipelines in your current role.
+ A: SQLAlchemy.
 
-4. Q: What is the purpose of the attention mask in transformer models?
- A: It prevents the model from attending to padding tokens or future tokens during training or inference.
+4. Q: What is the purpose of the softmax function in a multi‑class classification model?
+ A: It converts logits into class probabilities.
 
-5. Q: How do you handle class imbalance in deep learning?
- A: Use class‑weighted loss, focal loss, or resampling techniques such as SMOTE or random undersampling.
+5. Q: Which metric would you monitor to evaluate a regression model for real estate price prediction?
+ A: RMSE or MAE.
 
-6. Q: What is the role of the encoder in an encoder‑decoder model?
- A: The encoder transforms the input sequence into a contextual representation that the decoder uses to generate the output.
+6. Q: In your churn predictor, which feature selection technique did you use?
+ A: Feature importance from Random Forest.
 
-7. Q: Which optimizer did you use for training your LSTM models?
- A: Adam optimizer with a learning rate scheduler.
+7. Q: What is the main advantage of using a transformer over an RNN for sequence modeling?
+ A: Parallelizable and captures long‑range dependencies.
 
-8. Q: What is prompt engineering?
- A: Designing and refining prompts to guide language models toward desired outputs.
+8. Q: Which database did you use to store processed data for the asset management client?
+ A: PostgreSQL.
 
-9. Q: Name a tool you used for visualizing deep learning model performance.
- A: TensorBoard and Weights & Biases.
+9. Q: What is the role of the attention mask in transformer training?
+ A: It prevents attention to padding tokens.
 
-10. Q: How do you deploy a trained transformer model to production?
- A: Export the model to ONNX or TorchScript, serve it via a REST API (FastAPI/Flask), and containerize with Docker for scalability.
+10. Q: Which Python library did you use for visualizing dashboards in your projects?
+ A: Streamlit.

@@ -1,7 +1,7 @@
 import json
 import os
 from typing import Any, Dict
-import streamlit as st
+
 from langchain_groq import ChatGroq
 from langchain.schema import HumanMessage, SystemMessage
 from dotenv import load_dotenv
@@ -27,7 +27,7 @@ CANDIDATE_MODELS = [
 
 class DynamicLLMClient:
     def __init__(self, api_key: str = None, temperature: float = TEMPERATURE, max_tokens: int = MAX_TOKENS):
-        self.api_key = api_key or st.secrets["GROQ_API_KEY"]
+        self.api_key = api_key or os.getenv("GROQ_API_KEY")
         if not self.api_key:
             raise RuntimeError("GROQ_API_KEY is not set in environment.")
 
