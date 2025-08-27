@@ -16,7 +16,9 @@ from config import OUTPUT_DIR
 def main():
     st.title("🤖 AI Interview Preparation")
 
-    uploaded_file = st.file_uploader("Upload your Resume (txt/pdf/docx)", type=["txt", "pdf", "docx"])
+    uploaded_file = st.file_uploader(
+        "Upload your Resume (txt/pdf/docx)", type=["txt", "pdf", "docx"]
+    )
 
     if uploaded_file:
         # Save uploaded file to a temp dir
@@ -25,47 +27,69 @@ def main():
             with open(tmp_path, "wb") as f:
                 f.write(uploaded_file.getbuffer())
 
-
             resume_text = extract_text_any(tmp_path)
+
+        # Store resume text in session state so it persists
+        st.session_state["resume_text"] = resume_text
 
         st.subheader("Resume Extracted")
         st.text_area("Resume Text", resume_text, height=300)
 
-        if st.button("Generate Questions"):
-            st.info("Extracting topics and generating questions… this may take a while.")
+    # --- Generate Questions ---
+    if st.button("Generate Questions"):
+        if "resume_text" not in st.session_state:
+            st.error("Please upload a resume first.")
+            return
 
-            # 1. Extract topics
-            topic_tree = get_topic_tree(resume_text)
+        resume_text = st.session_state["resume_text"]
 
-            # 2. Clear previous outputs
-            if OUTPUT_DIR.exists():
-                shutil.rmtree(OUTPUT_DIR)
-            OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+        st.info("Extracting topics and generating questions… this may take a while.")
 
-            # 3. Generate QnA files
-            save_all_qna(topic_tree, resume_text, build_qna_json)
+        # 1. Extract topics
+        topic_tree = get_topic_tree(resume_text)
 
-            # 4. Zip results
-            zip_path = zip_dir(Path(OUTPUT_DIR), Path("interview_qna_texts.zip"))
+        # 2. Clear previous outputs
+        if OUTPUT_DIR.exists():
+            shutil.rmtree(OUTPUT_DIR)
+        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-            st.success("✅ All questions generated!")
-            with open(zip_path, "rb") as f:
-                st.download_button("Download QnA (ZIP)", f, file_name="interview_qna_texts.zip")
+        # 3. Generate QnA files
+        save_all_qna(topic_tree, resume_text, build_qna_json)
 
-            # 5. Optional TTS
-            if st.button("Convert to MP3 and Download"):
-                audio_dir = OUTPUT_DIR.parent / "audio_output"
-                if audio_dir.exists():
-                    shutil.rmtree(audio_dir)
-                audio_dir.mkdir(parents=True, exist_ok=True)
+        # 4. Zip results
+        zip_path = zip_dir(Path(OUTPUT_DIR), Path("interview_qna_texts.zip"))
 
-                txt_files = list(OUTPUT_DIR.rglob("*.txt"))
-                txt_to_mp3_tree(txt_files, OUTPUT_DIR, audio_dir)
+        # Save path to session state
+        st.session_state["zip_path"] = zip_path
+        st.success("✅ All questions generated!")
 
-                zip_audio = zip_dir(audio_dir, "interview_qna_audio.zip")
+    # --- Download QnA ZIP ---
+    if "zip_path" in st.session_state:
+        with open(st.session_state["zip_path"], "rb") as f:
+            st.download_button(
+                "Download QnA (ZIP)", f, file_name="interview_qna_texts.zip"
+            )
 
-                with open(zip_audio, "rb") as f:
-                    st.download_button("Download Audio (ZIP)", f, file_name="interview_qna_audio.zip")
+        # --- Convert to MP3 ---
+        if st.button("Convert to MP3"):
+            audio_dir = OUTPUT_DIR.parent / "audio_output"
+            if audio_dir.exists():
+                shutil.rmtree(audio_dir)
+            audio_dir.mkdir(parents=True, exist_ok=True)
+
+            txt_files = list(OUTPUT_DIR.rglob("*.txt"))
+            txt_to_mp3_tree(txt_files, OUTPUT_DIR, audio_dir)
+
+            zip_audio = zip_dir(audio_dir, "interview_qna_audio.zip")
+            st.session_state["zip_audio"] = zip_audio
+            st.success("🎵 Audio conversion complete!")
+
+    # --- Download Audio ZIP ---
+    if "zip_audio" in st.session_state:
+        with open(st.session_state["zip_audio"], "rb") as f:
+            st.download_button(
+                "Download Audio (ZIP)", f, file_name="interview_qna_audio.zip"
+            )
 
 
 if __name__ == "__main__":

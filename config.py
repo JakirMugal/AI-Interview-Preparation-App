@@ -10,7 +10,7 @@ AUDIO_ZIP_NAME = "qna_audio_bundle.zip"
 
 
 # --- LLM model ---
-GROQ_MODEL_NAME = "meta-llama/llama-4-scout-17b-16e-instruct" # change if desired
+GROQ_MODEL_NAME = "compound-beta" # change if desired
 TEMPERATURE = 0.2
 MAX_TOKENS = 1024*8
 

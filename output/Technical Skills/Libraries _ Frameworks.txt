@@ -1,0 +1,63 @@
+Unit: Libraries & Frameworks
+
+LONG-ANSWER:
+1. Q: Your resume highlights experience with Streamlit for building web applications. Can you describe a Streamlit project you've worked on, detailing the challenges you faced and how you overcame them?
+ A: Certainly! In my project 'Diet Planer with AI,' I used Streamlit to create an interactive web app that generates personalized diet plans. A key challenge was integrating the AI model seamlessly with the user interface. I overcame this by utilizing Streamlit's intuitive widgets and data binding capabilities to display model outputs dynamically and allow users to input preferences easily. This resulted in a user-friendly and engaging experience.
+
+2. Q: You've mentioned using SQLAlchemy for database interactions. Explain the advantages of using an ORM like SQLAlchemy over raw SQL queries, especially in larger projects.
+ A: SQLAlchemy provides several benefits over raw SQL, especially in complex projects. Firstly, it offers an object-oriented approach to database interactions, making code more readable and maintainable. Secondly, it handles database-specific syntax, allowing for portability across different database systems. Lastly, SQLAlchemy provides features like object-relational mapping and query building, simplifying complex database operations and reducing the risk of SQL injection vulnerabilities.
+
+3. Q: Your experience includes working with both structured and unstructured data. Describe a scenario where you had to process unstructured data, the tools you used, and the challenges you encountered.
+ A: At Alternative Path, I processed unstructured data from email attachments and PDFs. To extract insights, I leveraged libraries like Beautiful Soup for HTML parsing, and ChatGPT and other NLP tools for text summarization and key information extraction. A challenge was handling variations in document formats and structures. I addressed this by implementing robust parsing logic and using techniques like Named Entity Recognition to identify key entities within the text.
+
+4. Q: You've worked with various machine learning libraries like Scikit-learn and TensorFlow. How do you choose the right library for a specific machine learning task?
+ A: The choice of library depends on the task's nature and complexity. For traditional machine learning algorithms like classification and regression, Scikit-learn is often a good starting point due to its simplicity and ease of use. For deep learning tasks involving neural networks, TensorFlow or PyTorch are more suitable due to their flexibility and support for GPU acceleration.
+
+5. Q: Explain the concept of 'pipelines' in machine learning and how they are beneficial in a data science workflow. Provide an example from your experience.
+ A: Pipelines automate the entire machine learning workflow, from data preprocessing to model training and evaluation. They ensure consistency and reproducibility by defining a clear sequence of steps. In my work at Voosh Food Tech, I built pipelines using Python to collect data from various sources, preprocess it, apply machine learning algorithms, and generate reports. This streamlined the entire process and reduced the risk of errors.
+
+6. Q: You've worked with both PostgreSQL and Snowflake. What are the key differences between these databases, and when would you choose one over the other?
+ A: PostgreSQL is an open-source relational database known for its reliability and strong SQL support. Snowflake is a cloud-based data warehouse designed for scalability and performance with large datasets. I'd choose PostgreSQL for smaller, transactional workloads requiring strong data integrity, while Snowflake is better suited for large-scale data analysis and reporting due to its distributed architecture and pay-as-you-go pricing.
+
+7. Q: Describe your experience with web scraping using libraries like Selenium and Beautiful Soup. What are some ethical considerations when performing web scraping?
+ A: I've used Selenium and Beautiful Soup extensively for web scraping, automating tasks like data extraction from websites. Ethical considerations include respecting robots.txt rules, avoiding overloading target servers, and ensuring data usage complies with website terms of service. It's crucial to obtain permission when scraping sensitive data and to use scraped data responsibly.
+
+8. Q: You've mentioned using LangChain and Hugging Face for working with large language models. Explain how these frameworks simplify the process of integrating LLMs into applications.
+ A: LangChain provides a modular framework for developing applications powered by LLMs. It offers tools for prompt engineering, chaining together different LLMs and other tools, and managing memory. Hugging Face provides a vast repository of pre-trained LLMs and tools for fine-tuning them. Together, they streamline the process of integrating LLMs by providing pre-built components and simplifying complex interactions.
+
+9. Q: How do you stay updated with the latest advancements and trends in the field of libraries and frameworks?
+ A: I actively follow industry blogs, publications, and online communities like Stack Overflow and GitHub. I also participate in workshops, webinars, and conferences to learn about new tools and techniques. Continuous learning is crucial in this rapidly evolving field.
+
+10. Q: Can you describe a situation where you had to learn a new library or framework quickly to meet a project deadline? What strategies did you use to accelerate your learning process?
+ A: During my internship at MVG Innovation, I needed to learn OpenCV for a project involving image processing. I utilized online tutorials, documentation, and code examples to grasp the fundamentals quickly. I also experimented with small projects to solidify my understanding and sought help from online communities when facing challenges.
+
+SHORT-ANSWER:
+1. Q: What is the purpose of an ORM like SQLAlchemy?
+ A: ORMs like SQLAlchemy simplify database interactions by providing an object-oriented interface to interact with databases.
+
+2. Q: Name two advantages of using Streamlit for building web applications.
+ A: Streamlit is known for its ease of use and rapid prototyping capabilities.
+
+3. Q: What is the role of 'pipelines' in a machine learning workflow?
+ A: Pipelines automate the entire machine learning process, from data preprocessing to model deployment.
+
+4. Q: What is the difference between PostgreSQL and Snowflake?
+ A: PostgreSQL is an open-source relational database, while Snowflake is a cloud-based data warehouse.
+
+5. Q: How do you ensure ethical practices when performing web scraping?
+ A: Respect robots.txt rules, avoid overloading servers, obtain permission for sensitive data, and use data responsibly.
+
+6. Q: What is LangChain used for?
+ A: LangChain simplifies the development of applications powered by large language models.
+
+7. Q: Name a library you use for NLP tasks.
+ A: I use libraries like Beautiful Soup, NLTK, or spaCy for NLP tasks.
+
+8. Q: What is the purpose of a 'Hugging Face' model?
+ A: Hugging Face hosts a vast collection of pre-trained machine learning models, including LLMs.
+
+9. Q: What is the benefit of using a pre-trained LLM?
+ A: Pre-trained LLMs provide a starting point for specific tasks, reducing the need for extensive training data.
+
+10. Q: How do you stay updated on new libraries and frameworks?
+ A: I follow industry blogs, online communities, and attend workshops and conferences.

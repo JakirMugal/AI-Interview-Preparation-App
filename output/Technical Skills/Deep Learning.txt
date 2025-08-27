@@ -1,0 +1,63 @@
+Unit: Deep Learning
+
+LONG-ANSWER:
+1. Q: You've mentioned experience with Transformers in your resume. Can you elaborate on how they differ from traditional RNNs and LSTMs, and what advantages they offer for sequence modeling tasks?
+ A: Transformers, unlike RNNs and LSTMs, rely on an attention mechanism to process sequential data. This allows them to capture long-range dependencies more effectively and parallelize computations, leading to faster training.  They also have a self-attention mechanism that allows the model to weigh the importance of different words in a sequence, leading to better understanding of context. This makes them particularly suitable for tasks like machine translation, text summarization, and question answering.
+
+2. Q: Describe your experience with building and deploying deep learning models in a real-world setting. What were some of the challenges you faced, and how did you overcome them?
+ A: At Alternative Path, I built a multi-source scraping pipeline to collect data from APIs and websites. A key challenge was handling the dynamic nature of web structures and API changes. I addressed this by using robust web scraping libraries like Selenium and Playwright, implementing error handling, and continuously monitoring the pipeline for updates.  Another challenge was ensuring data quality and consistency. I used custom logic and NLP models to clean and enrich the data, and implemented data validation checks to maintain accuracy.
+
+3. Q: You've worked with various deep learning architectures like CNNs, RNNs, and LSTMs. Can you explain the strengths and weaknesses of each architecture and provide examples of tasks they are well-suited for?
+ A: CNNs excel at image recognition tasks due to their convolutional layers that learn spatial hierarchies. They are also effective for tasks involving pattern recognition in structured data. RNNs and LSTMs are designed for sequential data like text and time series. LSTMs, with their memory cells, are particularly good at handling long-term dependencies. However, they can be computationally expensive. CNNs are good for image classification, object detection, and natural language processing tasks like sentiment analysis. RNNs and LSTMs are well-suited for tasks like machine translation, speech recognition, and text generation.
+
+4. Q: Explain the concept of overfitting in deep learning and describe techniques you use to prevent or mitigate it.
+ A: Overfitting occurs when a model learns the training data too well, capturing noise and outliers, leading to poor performance on unseen data. To prevent overfitting, I use techniques like:  * **Regularization:** Adding penalty terms to the loss function to discourage complex models. * **Dropout:** Randomly dropping neurons during training to prevent over-reliance on any single neuron. * **Early Stopping:** Monitoring validation performance and stopping training when it starts to decrease. * **Data Augmentation:**  Artificially increasing the size and diversity of the training data.
+
+5. Q: How do you approach the task of hyperparameter tuning for deep learning models? What tools or techniques do you find most effective?
+ A: Hyperparameter tuning is crucial for optimizing model performance. I use a combination of techniques: * **Grid Search:** Systematically exploring a predefined range of hyperparameters. * **Random Search:** Randomly sampling hyperparameters from a distribution. * **Bayesian Optimization:** Using a probabilistic model to guide the search for optimal hyperparameters.  Tools like Optuna and Hyperopt are helpful for automating this process.
+
+6. Q: Describe your experience with using pre-trained language models (LLMs) like those from Hugging Face. How have you leveraged them in your projects?
+ A: I've used LLMs extensively in projects like my Resume Builder and Diet Planer.  Hugging Face provides a vast repository of pre-trained models, which I fine-tune for specific tasks. For example, in the Resume Builder, I fine-tuned a model to generate resumes based on LinkedIn job descriptions and user experience. In the Diet Planer, I used a model to understand user dietary preferences and generate personalized meal plans.
+
+7. Q: Explain the concept of transfer learning and how it can be beneficial in deep learning.
+ A: Transfer learning involves leveraging knowledge gained from one task to improve performance on a related but different task.  For example, a model pre-trained on a massive text dataset can be fine-tuned for tasks like sentiment analysis or question answering, requiring less training data and time. This is particularly useful when labeled data for the target task is scarce.
+
+8. Q: What are your thoughts on the ethical implications of deep learning, and how can we ensure responsible development and deployment of these models?
+ A: Deep learning has immense potential but also raises ethical concerns like bias, fairness, and transparency. It's crucial to: * **Address bias in training data:**  Ensure diverse and representative datasets to avoid perpetuating societal biases. * **Explainability:**  Develop methods to understand how models make decisions, promoting transparency and accountability. * **Privacy:**  Protect user data and ensure responsible data usage. * **Regulation:**  Establish guidelines and regulations for the development and deployment of deep learning models.
+
+9. Q: Describe your experience with using cloud platforms like Google Cloud Platform (GCP) for deep learning tasks. What advantages do you see in using cloud infrastructure for deep learning?
+ A: At Voosh Food Tech, I used GCP's BigQuery for data storage and processing. GCP's powerful GPUs and TPUs accelerate deep learning training significantly.  The scalability and flexibility of cloud platforms allow for handling large datasets and complex models efficiently.  Additionally, GCP provides pre-configured deep learning environments and tools, simplifying the development process.
+
+10. Q: Looking ahead, what are some areas of deep learning that you are particularly interested in exploring further?
+ A: I'm fascinated by the potential of generative AI and its applications in areas like drug discovery, creative content generation, and personalized learning. I'm also interested in exploring the intersection of deep learning with other fields like robotics and computer vision.
+
+SHORT-ANSWER:
+1. Q: What is the difference between supervised and unsupervised learning?
+ A: Supervised learning uses labeled data to train models to predict outcomes, while unsupervised learning uses unlabeled data to discover patterns and structures.
+
+2. Q: Name three deep learning activation functions and their characteristics.
+ A: ReLU (fast, but can suffer from vanishing gradients), Sigmoid (squashes output to 0-1, used in binary classification), Tanh (similar to sigmoid, but outputs -1 to 1).
+
+3. Q: What is the purpose of a loss function in deep learning?
+ A: The loss function measures the difference between model predictions and actual values, guiding the model to minimize this difference during training.
+
+4. Q: Briefly explain the concept of backpropagation.
+ A: Backpropagation is the algorithm used to calculate gradients and update model weights during training, propagating errors backward through the network.
+
+5. Q: What is the role of an optimizer in deep learning?
+ A: The optimizer determines how model weights are updated based on the calculated gradients, aiming to minimize the loss function.
+
+6. Q: What is a convolutional neural network (CNN) primarily used for?
+ A: CNNs are specialized for image recognition and processing tasks due to their convolutional layers that learn spatial hierarchies.
+
+7. Q: What is the key advantage of using recurrent neural networks (RNNs) for sequence data?
+ A: RNNs have internal memory, allowing them to process sequential data and capture long-term dependencies.
+
+8. Q: Name a popular deep learning framework you have experience with.
+ A: TensorFlow
+
+9. Q: What is the purpose of a batch size in deep learning?
+ A: The batch size determines the number of training examples used in each iteration during training, affecting training speed and stability.
+
+10. Q: What is the difference between training, validation, and test sets in deep learning?
+ A: Training data is used to train the model, validation data is used to tune hyperparameters, and test data is used to evaluate the final model performance.
