@@ -23,7 +23,7 @@ def extract_text_any(path: Path) -> str:
 
 
 def _extract_pdf(path: Path) -> str:
-    from pypdf import PdfReader
+    from PyPDF2 import PdfReader
     reader = PdfReader(str(path))
     text_parts = []
     max_pages = PDF_MAX_PAGES or len(reader.pages)

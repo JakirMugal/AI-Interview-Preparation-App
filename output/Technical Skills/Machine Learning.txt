@@ -1,63 +1,63 @@
 Unit: Machine Learning
 
 LONG-ANSWER:
-1. Q: What are the key differences between supervised and unsupervised learning in machine learning, and how do you decide which approach to use for a given problem?
- A: Supervised learning involves training a model on labeled data to make predictions, while unsupervised learning involves finding patterns in unlabeled data. The choice between the two depends on the problem's requirements and the availability of labeled data. For instance, if the goal is to classify images into categories, supervised learning would be suitable, whereas if the goal is to group similar customers based on their behavior, unsupervised learning would be more appropriate. The decision also depends on the complexity of the problem, the size of the dataset, and the computational resources available.
+1. Q: Jakir, you built a retention engine using K‑Means clustering and bonus allocation logic. Explain how you would evaluate its effectiveness beyond F‑score and what additional metrics or experiments you would run to ensure it truly improves 30‑day user retention.
+ A: I would start by segmenting the user base into treatment and control groups using A/B testing, ensuring random assignment to avoid selection bias. In addition to F‑score, I would track lift in retention rate, churn rate, and average revenue per user (ARPU) over 30 days. Time‑to‑event analysis would reveal how quickly users re‑engage. Finally, I’d monitor for unintended consequences such as increased bonus abuse or churn in high‑value segments, adjusting the clustering thresholds or bonus tiers accordingly.
 
-2. Q: How do you handle imbalanced datasets in machine learning, and what techniques can you use to improve the performance of your models on minority classes?
- A: Handling imbalanced datasets involves using techniques such as oversampling the minority class, undersampling the majority class, or generating synthetic samples using methods like SMOTE. Other techniques include using class weights, anomaly detection algorithms, or ensemble methods like bagging and boosting. It's also important to evaluate the model's performance using metrics like precision, recall, and F1-score, which provide a more nuanced understanding of the model's performance on both classes. Additionally, using techniques like data augmentation, transfer learning, or using pre-trained models can also help improve the performance on minority classes.
+2. Q: Describe the end‑to‑end pipeline you designed for the Intelligent Document Parsing project. How did you integrate ChatGPT, OCR, and your custom logic to extract tabular data from images?
+ A: The pipeline began with image ingestion and pre‑processing (deskewing, contrast enhancement). OCR (Tesseract) extracted raw text, which was then fed to a fine‑tuned ChatGPT model via LangChain to identify table boundaries and interpret cell content. Custom post‑processing scripts parsed the structured output into CSV/JSON, validated schema against expected columns, and stored the results in Snowflake. Error handling included a fallback to manual review for low‑confidence tables.
 
-3. Q: What are some common evaluation metrics used in machine learning, and how do you choose the right metric for a given problem?
- A: Common evaluation metrics in machine learning include accuracy, precision, recall, F1-score, mean squared error, mean absolute error, and R-squared. The choice of metric depends on the problem's requirements, the type of data, and the goals of the project. For instance, in classification problems, accuracy, precision, and recall are commonly used, while in regression problems, mean squared error and R-squared are more suitable. It's also important to consider the class distribution, the cost of false positives and false negatives, and the interpretability of the metric when choosing an evaluation metric.
+3. Q: You used Random Forest with hyperparameter tuning for the churn predictor v1. Explain the process you followed for hyperparameter optimization and how you balanced model complexity with interpretability.
+ A: I employed a randomized search over a grid of n_estimators, max_depth, min_samples_split, and max_features, using 5‑fold cross‑validation to estimate out‑of‑sample performance. I constrained max_depth to 10 to keep trees shallow, aiding interpretability. Feature importance scores guided pruning of irrelevant features, reducing dimensionality. The final model achieved a 0.78 ROC‑AUC while maintaining a manageable number of trees (200) for explainability.
 
-4. Q: How do you approach feature engineering in machine learning, and what techniques can you use to select the most relevant features for a given problem?
- A: Feature engineering involves selecting and transforming the most relevant features from the dataset to improve the performance of the model. Techniques like correlation analysis, mutual information, and recursive feature elimination can be used to select the most relevant features. Other techniques include using dimensionality reduction methods like PCA, t-SNE, or autoencoders to reduce the number of features while retaining the most important information. It's also important to consider the domain knowledge, the type of data, and the goals of the project when selecting features. Additionally, using techniques like feature extraction, feature construction, or using pre-trained models can also help improve the performance of the model.
+4. Q: In the Menu Engineering algorithm you used Levenshtein Distance for pattern matching. How did you handle synonyms and contextual variations in menu item names, and what impact did this have on accuracy?
+ A: I pre‑processed item names by lowercasing, removing stopwords, and applying stemming. A synonym dictionary (e.g., ‘burger’ ↔ ‘sandwich’) was merged into the token set. During matching, I computed a weighted Levenshtein distance where synonym matches had zero cost. This approach raised accuracy from 70% to 82% by correctly grouping items that differed only in wording or minor typos.
 
-5. Q: What are some common machine learning algorithms, and how do you choose the right algorithm for a given problem?
- A: Common machine learning algorithms include linear regression, logistic regression, decision trees, random forests, support vector machines, and neural networks. The choice of algorithm depends on the problem's requirements, the type of data, and the goals of the project. For instance, for linear regression problems, linear regression or logistic regression would be suitable, while for classification problems, decision trees, random forests, or support vector machines would be more appropriate. It's also important to consider the size of the dataset, the computational resources available, and the interpretability of the algorithm when choosing a machine learning algorithm.
+5. Q: Explain how you used the Apriori algorithm for combo analysis in Voosh Food Tech. What were the key metrics you derived, and how did they influence marketing decisions?
+ A: I extracted transaction logs from MongoDB, applied the Apriori algorithm to find frequent itemsets with a minimum support of 5%. Confidence and lift metrics identified high‑value combos. These insights guided cross‑sell promotions, reducing the menu‑to‑order conversion gap from 7% to 11.6% by highlighting complementary dishes in the UI.
 
-6. Q: How do you handle missing values in machine learning, and what techniques can you use to impute missing values?
- A: Handling missing values involves using techniques such as mean, median, or mode imputation, or using more advanced methods like regression imputation, K-nearest neighbors imputation, or multiple imputation. Other techniques include using data augmentation, transfer learning, or using pre-trained models to improve the performance of the model on missing values. It's also important to consider the type of data, the distribution of the missing values, and the goals of the project when choosing an imputation method. Additionally, using techniques like feature engineering, feature selection, or using ensemble methods can also help improve the performance of the model on missing values.
+6. Q: You automated reporting using great_tables and email distribution. Discuss how you ensured data freshness and consistency across the reporting pipeline.
+ A: Data ingestion jobs run hourly via Airflow, writing to a versioned staging table in Snowflake. A nightly ETL job aggregates metrics, applies deterministic transformations, and writes to a reporting schema. great_tables renders the latest snapshot, and the email scheduler pulls from the reporting schema, guaranteeing that stakeholders receive the same data snapshot each day. Change data capture logs help trace any discrepancies.
 
-7. Q: What are some common techniques used in natural language processing, and how do you approach NLP problems in machine learning?
- A: Common techniques used in NLP include tokenization, stemming, lemmatization, named entity recognition, part-of-speech tagging, and sentiment analysis. Approaching NLP problems involves using techniques like bag-of-words, term frequency-inverse document frequency, or word embeddings like Word2Vec or GloVe. Other techniques include using recurrent neural networks, long short-term memory networks, or transformers to model sequential dependencies in text data. It's also important to consider the type of text data, the goals of the project, and the computational resources available when choosing an NLP technique.
+7. Q: Jakir, you have experience with both supervised and unsupervised learning. Provide a scenario where you would choose clustering over classification, and explain the rationale.
+ A: When segmenting users for personalized offers without labeled churn data, clustering is appropriate. It uncovers natural groupings based on behavior (e.g., frequency, spend, feature usage). Classification requires labeled outcomes; without them, clustering reveals patterns that can later inform supervised models or targeted campaigns.
 
-8. Q: How do you approach time series forecasting in machine learning, and what techniques can you use to improve the accuracy of your forecasts?
- A: Approaching time series forecasting involves using techniques like autoregressive integrated moving average, exponential smoothing, or seasonal decomposition to model the underlying patterns in the data. Other techniques include using machine learning algorithms like linear regression, decision trees, or neural networks to forecast future values. It's also important to consider the type of data, the frequency of the data, and the goals of the project when choosing a forecasting method. Additionally, using techniques like feature engineering, feature selection, or using ensemble methods can also help improve the accuracy of the forecasts.
+8. Q: Describe how you leveraged LangChain and Hugging Face in your Diet Planner application. What challenges did you face with prompt engineering for personalized diet recommendations?
+ A: I used LangChain to chain a user profile retrieval step with a generative LLM from Hugging Face. Prompt engineering involved conditioning the LLM on user goals, allergies, and macro targets. Challenges included avoiding hallucinations and ensuring nutritional accuracy; I mitigated this by post‑processing LLM output through a rule‑based validator that cross‑checked macro totals against dietary guidelines.
 
-9. Q: What are some common techniques used in recommender systems, and how do you approach recommender system problems in machine learning?
- A: Common techniques used in recommender systems include collaborative filtering, content-based filtering, or hybrid approaches that combine multiple methods. Approaching recommender system problems involves using techniques like matrix factorization, neural networks, or graph-based methods to model the relationships between users and items. Other techniques include using techniques like feature engineering, feature selection, or using ensemble methods to improve the performance of the recommender system. It's also important to consider the type of data, the goals of the project, and the computational resources available when choosing a recommender system technique.
+9. Q: Explain the concept of bias‑variance tradeoff and how you applied it when tuning your fraud detection model for cashback bonuses.
+ A: I monitored training vs. validation loss to detect overfitting (high variance) or underfitting (high bias). I reduced model complexity by limiting tree depth and adding regularization, while increasing training data via synthetic samples to lower bias. The final model balanced a low false‑positive rate (to avoid penalizing legitimate users) with a high true‑positive rate (to catch fraud).
 
-10. Q: How do you evaluate the performance of a machine learning model, and what metrics can you use to compare the performance of different models?
- A: Evaluating the performance of a machine learning model involves using metrics like accuracy, precision, recall, F1-score, mean squared error, or R-squared to compare the predicted values with the actual values. Other metrics include using techniques like cross-validation, bootstrapping, or walk-forward optimization to evaluate the model's performance on unseen data. It's also important to consider the type of data, the goals of the project, and the computational resources available when choosing an evaluation metric. Additionally, using techniques like feature engineering, feature selection, or using ensemble methods can also help improve the performance of the model.
+10. Q: Jakir, you have built recommendation systems. Outline the steps you would take to evaluate a recommendation algorithm’s performance in a real‑world setting.
+ A: First, split data into training, validation, and hold‑out test sets, ensuring temporal integrity. Compute offline metrics like precision@k, recall@k, and NDCG. Then deploy a pilot A/B test, measuring lift in click‑through rate, conversion, and revenue. Finally, monitor drift by tracking changes in user interaction patterns and re‑train periodically.
 
 SHORT-ANSWER:
-1. Q: What is machine learning?
- A: Machine learning is a subset of artificial intelligence that involves training algorithms to make predictions or decisions based on data.
+1. Q: What library did you use for building Random Forest models?
+ A: Scikit‑learn.
 
-2. Q: What are the types of machine learning?
- A: There are three main types of machine learning: supervised, unsupervised, and reinforcement learning.
+2. Q: Which database did you integrate for storing processed data in the current role?
+ A: PostgreSQL and Snowflake.
 
-3. Q: What is supervised learning?
- A: Supervised learning involves training a model on labeled data to make predictions.
+3. Q: Name one NLP technique you applied in the Menu Engineering project.
+ A: Levenshtein Distance.
 
-4. Q: What is unsupervised learning?
- A: Unsupervised learning involves finding patterns in unlabeled data.
+4. Q: Which cloud platform did you use for AutoML?
+ A: Google Vertex AI.
 
-5. Q: What is reinforcement learning?
- A: Reinforcement learning involves training an agent to make decisions based on rewards or penalties.
+5. Q: What tool did you use for visualizing dashboards in the Voosh project?
+ A: Google Data Studio and Power BI.
 
-6. Q: What is deep learning?
- A: Deep learning is a subset of machine learning that involves using neural networks with multiple layers to make predictions.
+6. Q: Which Python library did you use for web scraping?
+ A: Selenium, Playwright, Beautiful Soup, Scrapy.
 
-7. Q: What is natural language processing?
- A: Natural language processing involves using machine learning algorithms to analyze and understand human language.
+7. Q: What metric did you use to measure churn prediction performance?
+ A: F‑score and ROC‑AUC.
 
-8. Q: What is recommender system?
- A: Recommender system involves using machine learning algorithms to recommend products or services to users based on their preferences.
+8. Q: Which language model did you integrate in the Diet Planner app?
+ A: Groq LLM via LangChain.
 
-9. Q: What is time series forecasting?
- A: Time series forecasting involves using machine learning algorithms to predict future values based on historical data.
+9. Q: What algorithm did you use for fraud detection in cashback bonuses?
+ A: Behavioral pattern recognition with Python (unsupervised clustering).
 
-10. Q: What is feature engineering?
- A: Feature engineering involves selecting and transforming the most relevant features from the dataset to improve the performance of the model.
+10. Q: Which database did you use for storing scraped data in Voosh?
+ A: MongoDB.

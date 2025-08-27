@@ -1,63 +1,63 @@
 Unit: Data Scientist
 
 LONG-ANSWER:
-1. Q: Describe your approach to building the Churn Predictor v2 at WitZeal Technology. How did user segmentation improve model performance?
- A: I segmented users based on behavioral patterns and transaction history, then applied Random Forest with hyperparameter tuning to each segment. This approach reduced churn by 40% by capturing nuanced patterns that a single model might miss, compared to Churn Predictor v1 which used a unified model.
+1. Q: Jakir, can you walk us through how you designed the Retention Engine at WitZeal, specifically the clustering and bonus allocation logic you implemented?
+ A: I started by extracting 30‑day behavioral features (session length, feature usage, transaction frequency) and normalized them. Using K‑Means with PyCluster, I identified 4 distinct user clusters that represented varying engagement levels. For each cluster, I defined a bonus tier based on the cluster’s average retention probability. The bonus allocation logic was encoded in a Python function that mapped cluster labels to monetary incentives, ensuring fairness and budget constraints. I evaluated the engine with an F‑score metric, observing a 15–22% lift in 30‑day retention. Finally, I automated the deployment via a scheduled Airflow DAG that refreshed clusters weekly.
 
-2. Q: How did you leverage NLP for intelligent document parsing at Alternative Path Pvt. Ltd.? What challenges did you face?
- A: I used ChatGPT and custom NLP models to summarize PDFs, extract tabular data from images, and translate Japanese documents. Challenges included handling unstructured layouts and multilingual text, which I addressed with OCR preprocessing and prompt engineering for context-aware summarization.
+2. Q: Describe the intelligent document parsing pipeline you built at Alternative Path using ChatGPT and other NLP tools.
+ A: The pipeline ingests PDFs and images from S3, then uses OCR (Tesseract) for text extraction. For long‑form PDFs, I leveraged a fine‑tuned GPT‑4 model via the LangChain framework to summarize content and translate Japanese sections to English. Tabular data was extracted using Camelot and parsed into structured CSVs. I applied custom regex and NLP entity extraction to pull key metrics from charts and transcripts. The parsed data is then stored in Snowflake via SQLAlchemy, with a metadata table tracking source, extraction timestamp, and confidence scores. Finally, I automated email reports with great_tables, delivering daily insights to portfolio managers.
 
-3. Q: Explain your ETL pipeline design for multi-source data integration at Alternative Path. How did you ensure data consistency?
- A: I built Python-based pipelines using SQLAlchemy ORM to ingest data from APIs, S3, and emails. Data consistency was enforced via schema validation, incremental loading, and checksum comparisons between source and destination databases like PostgreSQL and Snowflake.
+3. Q: How did you approach building the multi‑source scraping pipeline for a single website, and what challenges did you overcome?
+ A: I first mapped all available endpoints and identified rate limits and authentication mechanisms. Using Playwright for dynamic content and Requests for static APIs, I built a modular scraper where each source had its own handler. I introduced a retry/backoff strategy and a shared queue to avoid duplicate requests. Data consistency was ensured by normalizing JSON schemas into a unified Pandas DataFrame before persisting. Debugging complex APIs required logging request/response headers and using Postman to replicate failures. The final pipeline runs as a Docker container orchestrated by Kubernetes, scaling horizontally during peak traffic.
 
-4. Q: What strategies did you use to improve medical data classification accuracy from 60% to 95% in your 'Enhance Accuracy' project?
- A: I applied Random Forest with hyperparameter tuning, feature engineering (PCA), and cross-validation. I also optimized the class imbalance using SMOTE and iteratively refined the model by analyzing confusion matrices and feature importances.
+4. Q: Explain how you built the churn predictor v2 at WitZeal, including the segmentation strategy and model selection.
+ A: I first performed exploratory data analysis to identify demographic and behavioral features correlated with churn. Using K‑Means, I segmented users into 5 clusters based on usage patterns. For each segment, I trained a Random Forest classifier with stratified 5‑fold cross‑validation, tuning hyperparameters via Optuna. I compared performance across segments and selected the best‑performing model per segment, achieving an overall AUC of 0.87. The final pipeline scores new users in real time and flags high‑risk churners for targeted retention campaigns. Deployment was handled through Vertex AI Pipelines, with a monitoring endpoint that alerts on drift.
 
-5. Q: How did you automate reporting for portfolio managers at Alternative Path? What tools did you use?
- A: I generated HTML tables with great_tables, integrated dashboard screenshots from Power BI, and automated email delivery using Python scripts. Reports were stored in S3 buckets for version control, ensuring stakeholders received consistent, actionable insights daily.
+5. Q: Jakir, can you detail the menu engineering algorithm you developed at Voosh Food Tech using Levenshtein distance and NLP?
+ A: I collected menu items and customer reviews, then tokenized dish names using spaCy. To match user‑entered dish names to the official menu, I computed Levenshtein distance between tokens and applied a threshold of 0.8 for fuzzy matching. I augmented this with word embeddings (GloVe) to capture semantic similarity, improving recall for misspellings. The algorithm outputs a mapping score and suggested corrections, achieving 82% accuracy on a held‑out test set. I integrated the tool into the existing ETL pipeline, storing matched pairs in MongoDB for downstream recommendation systems.
 
-6. Q: Walk through your process for designing the Diet Planner with AI. How did GROQ and Streamlit contribute?
- A: I used GROQ's LLM to generate personalized diet plans based on user inputs like health goals and allergies. Streamlit created an interactive web interface for real-time feedback, while Python handled backend logic for recipe recommendations and nutritional analysis.
+6. Q: What methodology did you use to detect fraud in cashback bonuses at WitZeal, and how did you validate its effectiveness?
+ A: I engineered behavioral features such as transaction velocity, device fingerprinting, and time‑of‑day patterns. Using a supervised learning approach, I trained a Gradient Boosting model (XGBoost) on labeled fraud cases. I performed feature importance analysis to ensure interpretability for compliance. The model achieved an F1‑score of 0.78 on the test set. To validate, I ran a controlled A/B test where flagged transactions were manually reviewed, confirming a 30% reduction in fraudulent claims. The system is now integrated into the real‑time transaction pipeline via a Lambda function.
 
-7. Q: What role did CleverTap play in your customer retention strategies at Voosh Food Tech?
- A: CleverTap segmented users based on order frequency and preferences. I designed personalized campaigns (e.g., discounts on underperforming items) that boosted retention by 16.43%. Behavioral funnels helped identify drop-off points in the customer journey.
+7. Q: Jakir, how did you leverage AutoML and Google Vertex AI for model deployment in your recent projects?
+ A: I used Vertex AI’s AutoML Tables to quickly prototype tabular models, selecting the best algorithm (XGBoost, Random Forest) based on validation metrics. For custom models, I containerized the training script with Docker, then pushed the image to Artifact Registry. Vertex AI Pipelines orchestrated the training, evaluation, and deployment stages, automatically rolling back if metrics degraded. I set up monitoring with Vertex AI Monitoring to track latency and prediction drift. This approach reduced deployment time from weeks to days and ensured reproducibility across environments.
 
-8. Q: How did you apply the Apriori algorithm for combo analysis at Voosh? What business impact did it have?
- A: I analyzed transaction data to identify frequently co-purchased items, generating combo recommendations. This improved upselling opportunities and increased the menu-to-order conversion ratio from 7% to 11.6% by aligning promotions with customer preferences.
+8. Q: Explain your experience building data pipelines to Snowflake using SQLAlchemy, referencing your current role.
+ A: I designed an ETL workflow where raw JSON from web scraping is parsed into Pandas DataFrames. Using SQLAlchemy ORM, I mapped these DataFrames to Snowflake tables, leveraging the Snowflake dialect for efficient bulk loading via the COPY command. I implemented idempotent upserts by generating unique hashes for each record. Transactional integrity is maintained with explicit commit/rollback logic. The pipeline is scheduled with Airflow, and I added logging and alerting via Slack for failures.
 
-9. Q: Explain your fraud detection approach for cashback abuse at WitZeal. How did behavioral pattern recognition work?
- A: I built a Python algorithm to flag anomalies in user behavior, such as sudden spikes in cashback claims or repetitive transaction patterns. Features like login frequency and claim timing were analyzed using clustering to distinguish legitimate vs. fraudulent activity.
+9. Q: Jakir, can you describe how you built the AI‑powered diet planner web app using GROQ and Streamlit?
+ A: I integrated the GROQ API to query a curated nutrition database, retrieving macro‑nutrient profiles based on user inputs. The Streamlit interface collects user preferences, goals, and health constraints. I used a simple rule‑based engine to generate meal plans, then refined them with a GPT‑4 prompt that suggests substitutions and portion sizes. The app displays interactive charts (matplotlib) and allows users to export PDFs. Deployment is handled on Render with a Dockerfile, and I added a caching layer to reduce API calls.
 
-10. Q: How did you optimize the Menu Engineering algorithm at Voosh using Levenshtein Distance?
- A: I used Levenshtein Distance to measure similarity between menu items and customer search terms, improving pattern matching accuracy to 82%. This helped optimize menu visibility and reduce customer search friction, directly boosting order conversion rates.
+10. Q: Jakir, how would you build a recommendation system to improve user retention for a fintech app?
+ A: I would start by constructing a user‑item interaction matrix from transaction logs, then apply collaborative filtering (SVD) to capture latent preferences. To incorporate contextual signals (time of day, device type), I would augment the model with side‑information via a hybrid matrix factorization. I’d evaluate using offline metrics (Recall@10, NDCG) and run an online A/B test to measure lift in retention. The system would be served via a REST API on Vertex AI, with a feedback loop that retrains monthly using new interaction data.
 
 SHORT-ANSWER:
-1. Q: Which ML models have you deployed in production?
- A: Random Forest, SVM, K-Means, and NLP models via LangChain and Hugging Face.
+1. Q: Which libraries did you use for NLP tasks?
+ A: spaCy, NLTK, Hugging Face Transformers, LangChain, and OpenCV for OCR.
 
-2. Q: How do you handle missing data in time series?
- A: I use forward-fill, interpolation, or domain-specific imputation based on context.
+2. Q: What database did you primarily use for structured data?
+ A: PostgreSQL and Snowflake.
 
-3. Q: What tools do you use for web scraping?
- A: Selenium, Playwright, Beautiful Soup, and Scrapy with anti-bot strategies.
+3. Q: Which cloud platform did you use for AutoML?
+ A: Google Vertex AI.
 
-4. Q: What's your experience with cloud platforms?
- A: Google Vertex AI, BigQuery, and AWS S3 for data storage and model deployment.
+4. Q: What tool did you use for web scraping?
+ A: Selenium, Playwright, Beautiful Soup, and Scrapy.
 
-5. Q: How do you validate a machine learning model?
- A: Cross-validation, F1-score, ROC-AUC, and confusion matrix analysis.
+5. Q: Name a BI tool you have automated dashboards with.
+ A: Power BI and Tableau.
 
-6. Q: Which NLP libraries do you prefer?
- A: Hugging Face Transformers, spaCy, and custom prompt engineering with GROQ.
+6. Q: What programming language is your strongest?
+ A: Python.
 
-7. Q: What's your approach to A/B testing?
- A: Define hypotheses, segment users, measure KPIs, and analyze statistical significance.
+7. Q: Which algorithm did you use for churn prediction?
+ A: Random Forest with hyperparameter tuning.
 
-8. Q: How do you handle large datasets?
- A: Distributed processing with Dask, database partitioning, and feature selection.
+8. Q: What metric did you use to evaluate the retention engine?
+ A: F‑score.
 
-9. Q: What's your experience with customer engagement platforms?
- A: CleverTap and WebEngage for segmentation, push notifications, and campaign analytics.
+9. Q: Which model did you use for fraud detection?
+ A: Gradient Boosting (XGBoost).
 
-10. Q: What's your strongest technical skill?
- A: End-to-end ML pipeline development from data ingestion to deployment.
+10. Q: What is the purpose of Levenshtein distance in your menu engineering?
+ A: To match user‑entered dish names to official menu items with fuzzy matching.

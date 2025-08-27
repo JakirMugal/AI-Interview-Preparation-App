@@ -1,63 +1,69 @@
 Unit: Data Engineer
 
 LONG-ANSWER:
-1. Q: Describe how you designed a multi-source scraping pipeline for a client. What challenges did you face with API debugging, and how did you resolve them?
- A: I built a unified system to collect data from multiple endpoints of a single website. Challenges included inconsistent API responses and rate-limiting. I resolved these by implementing retry logic, caching, and using Postman for endpoint testing to ensure reliability.
+1. Q: Jakir, can you walk us through how you designed the unified web‑scraping pipeline for Alternative Path, especially how you handled fault tolerance and scalability across multiple APIs and HTML endpoints?
+ A: I started by abstracting each source into a connector class that implements a standard fetch() method. For APIs I used requests with retry logic and exponential backoff; for HTML I leveraged Selenium with headless browsers and Playwright for dynamic content. I queued jobs in a Redis-backed Celery worker pool to parallelize requests and used a circuit‑breaker pattern to isolate failing endpoints. Data was streamed into a staging S3 bucket, then processed by a Python ETL that performed validation and deduplication before persisting to PostgreSQL via SQLAlchemy. Monitoring was set up with Prometheus metrics and alerts for latency spikes or 5xx errors. This architecture allowed horizontal scaling by adding worker nodes and ensured graceful degradation when any source failed.
 
-2. Q: How do you handle unstructured data (e.g., PDFs, images) in ETL workflows? Provide an example from your experience.
- A: I used NLP models like ChatGPT to extract text from PDFs and OCR for images. For instance, I parsed Japanese documents by translating them to English and extracted tabular data from images using OpenCV and Tesseract for downstream analysis.
+2. Q: Describe the end‑to‑end process you used to convert unstructured PDFs and images into structured data, referencing your Intelligent Document Parsing project.
+ A: First, I extracted text using Tesseract OCR for scanned PDFs and pdfminer for digital PDFs. For images containing tables or charts, I applied OpenCV to detect table grids and used Camelot or Tabula to parse them. I then fed the extracted text into a fine‑tuned GPT‑4 model via LangChain to summarize content and identify key entities. The structured output was validated against a schema and stored in Snowflake. I also built a fallback rule‑based extractor for documents that the LLM struggled with. Finally, I logged extraction confidence scores to flag low‑quality records for manual review.
 
-3. Q: Explain how you optimized query performance in PostgreSQL and Snowflake for a high-volume data pipeline.
- A: I leveraged SQLAlchemy ORM for schema consistency and indexed frequently queried columns. In Snowflake, I partitioned tables and used clustering keys. For PostgreSQL, I optimized vacuum settings and analyzed query execution plans to reduce latency.
+3. Q: How did you migrate data from a legacy MySQL database to Snowflake using SQLAlchemy, and what steps did you take to ensure data consistency and query performance?
+ A: I mapped MySQL tables to SQLAlchemy ORM models and used a bulk‑load script to read chunks into Pandas DataFrames. I then used Snowflake's Python connector to stage the DataFrames into external tables via S3. After staging, I executed COPY INTO commands with appropriate file formats and partitioning on key columns. To maintain consistency, I wrapped the migration in a transaction and performed checksum comparisons between source and target rows. For performance, I created clustering keys on high‑cardinality columns and materialized views on frequently joined tables. I also scheduled nightly refreshes and monitored query latency with Snowflake's Query Profile.
 
-4. Q: Walk through your approach to automating daily/weekly reports for stakeholders. How did you ensure accuracy and timeliness?
- A: I used Python scripts with great_tables to generate HTML tables and integrated them with email automation. I scheduled workflows via cron jobs and validated outputs with checksums to catch errors before distribution.
+4. Q: Explain how you integrated sentiment analysis into your ETL pipeline, including model selection, feature extraction, and downstream reporting.
+ A: I chose Hugging Face's DistilBERT fine‑tuned for sentiment, loading it via the transformers library. Text features were tokenized and passed through the model to obtain polarity scores. I then aggregated scores per document and stored them in a Snowflake dimension table. The ETL updated a dashboard in Power BI that visualized sentiment trends over time. To keep the pipeline lightweight, I cached model outputs in Redis and refreshed them only when new data arrived. This approach allowed near‑real‑time sentiment insights for portfolio managers.
 
-5. Q: How would you design a scalable ETL pipeline for time-series data from web scraping and S3? Reference your experience.
- A: I’d use Airflow for orchestration, store raw data in S3, and process it with Spark for scalability. Timestamp comparison and incremental loading would minimize redundant processing, as done in my work with financial data pipelines.
+5. Q: Jakir, how did you automate the distribution of daily reports via email with HTML tables and S3 bucket integration while ensuring security and compliance?
+ A: I generated HTML tables using great_tables and embedded them in an email body constructed with Python's email.mime. The email was sent through SES with TLS encryption and IAM roles restricting access. Report files were uploaded to a private S3 bucket with server‑side encryption and signed URLs that expire after 24 hours. I logged each send event to CloudWatch and used a Lambda function to trigger the pipeline on a schedule. Compliance was ensured by storing audit logs in a separate S3 bucket and rotating credentials via Secrets Manager.
 
-6. Q: What strategies do you use to ensure data consistency when integrating multiple sources into a single database?
- A: I employ schema validation during ingestion, use SQLAlchemy’s transactional commits, and implement data lineage tracking. For example, I reconciled discrepancies between web-scraped and S3 data by cross-referencing unique identifiers.
+6. Q: What challenges do you face when handling time‑series data in a data engineering context, and how would you design a pipeline to ingest, store, and query such data efficiently?
+ A: Time‑series data requires high ingestion throughput, precise timestamp handling, and efficient compression. I use Kafka for real‑time ingestion, then stream into Snowflake with micro‑batching. Data is partitioned by year/month and clustered on the timestamp column to accelerate range queries. I apply window functions in Snowflake for trend analysis and store aggregated metrics in a separate fact table. For long‑term retention, I archive older partitions to S3 using Snowflake's external tables. Monitoring is done via Snowflake's Query History and custom dashboards in Tableau.
 
-7. Q: How have you applied machine learning models (e.g., NLP) within data engineering workflows? Provide a specific example.
- A: I integrated sentiment analysis models into pipelines to enrich customer feedback data. For instance, I used Hugging Face’s transformers to classify sentiment scores, which were then joined with structured metrics for portfolio managers.
+7. Q: How would you monitor and alert on data pipeline failures in a production environment, including logging, metrics, and alerting mechanisms?
+ A: I instrument pipelines with structured logging (JSON) and emit metrics to Prometheus. Each ETL step publishes a status metric (success/failure, latency). I set up Grafana dashboards and alert rules for error rates exceeding 5% or latency above the 95th percentile. For critical failures, I trigger PagerDuty alerts. I also use Airflow's built‑in SLA and retry policies to automatically recover transient issues. All logs are forwarded to ELK for long‑term analysis.
 
-8. Q: Describe a scenario where you had to troubleshoot a failed ETL job. What tools and methodologies did you use?
- A: A failed job due to schema drift was resolved by adding dynamic schema validation. I used logging in Python and Airflow’s XCom to trace errors, then updated the pipeline to handle new fields via conditional transformations.
+8. Q: Describe how you would design a data lake architecture using Amazon S3 and Glue, including cataloging, partitioning, and data quality checks.
+ A: I create a raw bucket for ingestion and a curated bucket for processed data. Glue crawlers automatically populate the Data Catalog with schemas inferred from Parquet files. I partition data by date and source to enable efficient pruning. For quality, I implement Glue ETL jobs that validate schema, check for nulls, and enforce business rules, writing violations to a separate audit table. I also schedule Glue workflows to run nightly, and use AWS Lake Formation to control fine‑grained access.
 
-9. Q: How do you approach data enrichment tasks like timestamp comparison or document summarization in your pipelines?
- A: For timestamp comparison, I use Pandas’ datetime functions to align time zones. For summarization, I leverage LangChain with Groq’s LLMs to condense long-form documents, ensuring summaries are concise and retain key insights for downstream analysis.
+9. Q: Jakir, how do you optimize SQL queries for large datasets in Snowflake, particularly using clustering keys, materialized views, and caching?
+ A: I first analyze query patterns and identify high‑cardinality columns for clustering keys to reduce pruning overhead. I create materialized views on frequently joined tables to materialize expensive joins. Snowflake's result caching automatically serves repeated queries, so I ensure queries are deterministic to benefit from it. I also use the Snowflake query profile to spot full scans and rewrite them with semi‑joins or approximate aggregations. Finally, I monitor cache hit ratios and adjust clustering depth accordingly.
 
-10. Q: What tools and techniques do you use to monitor and maintain data pipeline reliability in production?
- A: I use Prometheus for metrics and Grafana for dashboards. For alerting, I set up Slack notifications via Webhooks for Airflow failures. Regular health checks and automated retries ensure pipelines self-heal from transient issues.
+10. Q: Explain how you would integrate a churn prediction model into a data pipeline to serve predictions in real‑time or batch.
+ A: For batch, I schedule a nightly job that pulls the latest user activity from PostgreSQL, transforms features with a pre‑trained Random Forest model stored in S3, and writes predictions to a Snowflake fact table. For real‑time, I expose the model via a FastAPI endpoint behind an API Gateway, using a lightweight ONNX or pickle file. The pipeline streams user events into Kafka, which triggers the API to compute a prediction and writes the result back to a Redis cache for quick lookup by downstream services. I monitor prediction drift by comparing recent scores to historical baselines.
+
+11. Q: Jakir, can you discuss how you would handle schema evolution in a data lake when new columns are added to source data?
+ A: I use Glue's schema versioning to track changes and automatically update the Data Catalog. When new columns appear, I add them to the target Parquet schema with default values or nulls. I also maintain a transformation layer that maps legacy columns to the new schema, ensuring backward compatibility. For downstream consumers, I provide a view that abstracts the evolving schema, exposing only stable columns. I schedule periodic data quality checks to flag missing or unexpected columns.
+
+12. Q: Describe how you would implement data lineage tracking across your ETL processes.
+ A: I instrument each ETL step with metadata tags that capture source, transformation logic, and destination. I store lineage records in a dedicated Snowflake table, linking job IDs to source tables and target tables. I expose this metadata via a custom UI built with Streamlit, allowing stakeholders to trace data flow. Additionally, I integrate with Apache Atlas for governance and use Airflow's XComs to propagate lineage information automatically.
 
 SHORT-ANSWER:
-1. Q: What role does SQLAlchemy play in your ETL processes?
- A: SQLAlchemy ORM simplifies database interactions by abstracting schema definitions and ensuring type-safe queries during data transformation.
+1. Q: What is the primary purpose of using SQLAlchemy in ETL pipelines?
+ A: It provides an ORM abstraction for database interactions, simplifying CRUD operations and schema migrations.
 
-2. Q: List three tools you’ve used for web scraping.
- A: Selenium, Playwright, and Beautiful Soup.
+2. Q: Name two Python libraries you used for web scraping.
+ A: Selenium and BeautifulSoup (also Playwright and Scrapy).
 
-3. Q: How do you handle missing or inconsistent data in pipelines?
- A: I use Pandas’ fillna() with domain-specific defaults and apply schema validation rules during ingestion.
+3. Q: Which databases did you store processed data in at Alternative Path?
+ A: PostgreSQL and Snowflake.
 
-4. Q: Which cloud platforms have you worked with for data engineering?
- A: Google BigQuery and Vertex AI for cloud-based data processing and model integration.
+4. Q: What is the role of great_tables in your reporting?
+ A: It generates clean, styled HTML tables for email and web dashboards.
 
-5. Q: What BI tools are you proficient in?
- A: Google Data Studio, Tableau, and Power BI for visualization and dashboarding.
+5. Q: Which cloud platform did you use for AutoML?
+ A: Google Vertex AI.
 
-6. Q: How do you automate report distribution to stakeholders?
- A: I use Python’s smtplib for email automation and schedule tasks with cron or Airflow.
+6. Q: What is the main advantage of using Snowflake over PostgreSQL for analytics?
+ A: Separation of storage and compute, elastic scaling, and native clustering.
 
-7. Q: What’s the purpose of ORM in database interactions?
- A: ORM maps database tables to code objects, reducing boilerplate SQL and improving code maintainability.
+7. Q: How do you handle missing values in Pandas?
+ A: Using dropna(), fillna(), or interpolation based on context.
 
-8. Q: Which NLP libraries have you integrated into data workflows?
- A: Hugging Face Transformers and OpenCV for text/image processing in ETL pipelines.
+8. Q: What is the purpose of using LangChain in LLM projects?
+ A: It orchestrates prompt chains, memory, and LLM calls for complex workflows.
 
-9. Q: How do you version control data pipeline code?
- A: I use Git with GitHub for collaborative development and CI/CD pipelines for deployment.
+9. Q: Which tool did you use to automate email delivery of reports?
+ A: Python's smtplib with SES integration and scheduled Lambda functions.
 
-10. Q: What’s your approach to data validation in pipelines?
- A: I implement schema checks using Great Expectations and validate data types during ingestion.
+10. Q: What is the benefit of using Streamlit for your AI projects?
+ A: Rapid prototyping, interactive UI, and easy deployment of ML demos.

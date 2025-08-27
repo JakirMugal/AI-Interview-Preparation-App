@@ -57,8 +57,10 @@ def save_all_qna(
         for sub in topic.get("subtopics", []):
             if stop_flag and stop_flag():  # Stop requested
                 return
-
-            qna = qna_builder(resume_text, sub)
+            try:
+                qna = qna_builder(resume_text, sub)
+            except:
+                continue
             save_qna(t_name, sub, qna)
 
             done += 1

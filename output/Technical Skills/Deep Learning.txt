@@ -1,63 +1,63 @@
 Unit: Deep Learning
 
 LONG-ANSWER:
-1. Q: How did you apply sequence-to-sequence models in your work at Alternative Path Pvt. Ltd. for data enrichment tasks?
- A: At Alternative Path, I used sequence-to-sequence models to process unstructured text data, such as summarizing long-form PDFs and extracting insights from podcast transcripts. These models enabled mapping input sequences (e.g., raw text) to output sequences (e.g., summaries) while preserving contextual meaning, leveraging attention mechanisms for alignment accuracy.
+1. Q: Explain the differences between CNN, RNN, and Transformer architectures and when you would choose each for a given problem.
+ A: CNNs excel at spatial feature extraction, making them ideal for image classification, object detection, and video frame analysis. RNNs, especially LSTMs and GRUs, capture temporal dependencies in sequential data such as text or time series, but suffer from vanishing gradients and slower training. Transformers use self‑attention to model long‑range dependencies efficiently, enabling state‑of‑the‑art performance in NLP, machine translation, and even vision tasks when paired with vision‑transformer backbones. Choose CNNs for spatial tasks, RNNs for moderate‑length sequences with limited context, and Transformers for long‑range, parallelizable sequence modeling.
 
-2. Q: Compare the use of LSTM and GRU in your time series prediction projects. Which architecture did you prefer and why?
- A: In time series prediction, I used LSTM for tasks requiring long-term dependency capture, such as financial data forecasting. GRU was preferred for simpler sequences due to its lower computational cost. For instance, in a stock trend project, LSTM outperformed GRU in capturing multi-week patterns, but GRU was sufficient for daily anomaly detection.
+2. Q: Describe how the attention mechanism works in Transformers and why it is beneficial for sequence‑to‑sequence tasks.
+ A: Attention computes a weighted sum of value vectors, where weights are derived from similarity scores between query and key vectors. This allows each token to attend to all others, capturing global context without recurrence. In sequence‑to‑sequence tasks, attention aligns source and target tokens, improving alignment quality and enabling parallel decoding. It also mitigates the fixed‑size hidden state bottleneck of RNNs, leading to better handling of long sentences and more efficient training.
 
-3. Q: Describe how you integrated attention mechanisms in your NLP projects, such as the Intelligent Document Parsing system.
- A: In the Intelligent Document Parsing project, I implemented self-attention mechanisms to prioritize relevant sections of PDFs and images during summarization. This allowed the model to dynamically focus on key phrases (e.g., financial figures) while ignoring noise, improving extraction accuracy by 25% compared to non-attention models.
+3. Q: You are tasked with building a fraud detection model for cashback bonuses. How would you design a deep learning pipeline, including data preprocessing, model selection, and evaluation metrics?
+ A: First, clean and engineer features: encode categorical fields, normalize numeric values, and generate behavioral embeddings from user activity logs. Use a balanced sampling strategy or focal loss to address class imbalance. For the model, a hybrid architecture combining a shallow feed‑forward network for static features and an LSTM or Transformer encoder for sequential behavior is effective. Evaluate with precision‑recall curves, F1‑score, and ROC‑AUC, and perform cross‑validation to ensure robustness across user segments.
 
-4. Q: How did you optimize CNNs for image-based data extraction in your AI Video Processing (AVP) project?
- A: For AVP, I optimized CNNs by using transfer learning with pre-trained models like ResNet for feature extraction. I also applied data augmentation (rotation, scaling) to handle low-quality inputs and reduced overfitting via dropout layers. This improved document scanning accuracy from 78% to 92% on test datasets.
+4. Q: In your AI Video Processing project, you implemented background/foreground estimation. Explain how you used convolutional networks for this task and how you handled real‑time constraints.
+ A: I employed a lightweight U‑Net variant with depthwise separable convolutions to segment each frame into foreground and background masks. To meet real‑time constraints, I reduced the input resolution, used TensorRT for inference optimization, and processed frames in a sliding window to reuse feature maps. The model was quantized to 8‑bit and deployed on a GPU‑enabled edge device, achieving ~30 FPS while maintaining >90% IoU on validation videos.
 
-5. Q: Explain the role of encoder-decoder architectures in your Diet Planner with AI application. How did you ensure user-specific personalization?
- A: The encoder processed user inputs (goals, preferences) into latent representations, while the decoder generated diet plans using GROQ’s LLM. Personalization was achieved by fine-tuning the model on user health data and incorporating feedback loops to adjust recommendations dynamically based on user interactions.
+5. Q: You used LLMs and LangChain to build a diet planner. Discuss how you integrated prompt engineering and model context protocol (MCP) to generate personalized diet plans.
+ A: I crafted modular prompts that first gather user preferences, then request a nutritional summary, and finally ask for meal suggestions. Using LangChain’s chain of thought, each sub‑prompt is executed sequentially, and the outputs are fed back into the next prompt. MCP was employed to store user context across sessions, allowing the model to recall past dietary choices and adjust recommendations. This approach reduced hallucinations and improved plan relevance.
 
-6. Q: What challenges did you face when deploying deep learning models for real-time fraud detection at WitZeal, and how did you address them?
- A: Real-time fraud detection required low-latency inference. I optimized models by pruning unnecessary layers and using ONNX for cross-platform deployment. Additionally, I implemented sliding window RNNs to process sequential user behavior, reducing detection time from 120ms to 30ms without sacrificing precision.
+6. Q: Explain the role of encoder‑decoder architecture in machine translation and how you would adapt it for a domain‑specific translation task such as translating medical reports.
+ A: The encoder compresses the source sentence into contextual embeddings, while the decoder generates the target sentence token by token, attending to encoder outputs. For medical translation, I would fine‑tune a pre‑trained encoder‑decoder on a curated corpus of medical documents, incorporate domain‑specific terminology via a custom vocabulary, and apply a constrained decoding strategy to preserve critical terms. Additionally, I would use a domain‑adapted tokenizer and add a post‑processing step to correct any medical jargon errors.
 
-7. Q: How did you leverage Transformers in your Resume Builder with AI project to align job descriptions with user experience?
- A: Transformers were used to encode job descriptions and user resumes into contextual embeddings. By fine-tuning BERT on domain-specific data, the model matched skills and keywords effectively. Cross-attention mechanisms helped prioritize relevant sections, achieving 89% alignment accuracy in pilot tests.
+7. Q: Describe how you would use time series prediction with LSTM for forecasting asset management portfolio returns, including handling of seasonality and external features.
+ A: I would construct a multivariate LSTM that ingests past returns, volatility, macro indicators, and calendar features (month, quarter). Seasonal patterns are captured by feeding lagged seasonal terms or using a seasonal decomposition layer before the LSTM. External features are concatenated to the LSTM output before the final dense layer. I would train with a mean‑squared error loss and evaluate using directional accuracy and mean absolute percentage error.
 
-8. Q: Walk through your approach to hyperparameter tuning for the Churn Predictor v2 model at WitZeal. What metrics did you prioritize?
- A: I used Bayesian optimization with Optuna to tune hyperparameters like tree depth and learning rate in Random Forest. I prioritized F1-score over accuracy to balance class-imbalanced churn data. This reduced overfitting and improved recall by 18%, enabling better segment-specific churn predictions.
+8. Q: You built a churn predictor using Random Forest. How would you transition to a deep learning model, and what advantages or challenges would you expect?
+ A: Transitioning involves encoding categorical variables with embeddings, normalizing numeric features, and feeding them into a feed‑forward network or a tabular transformer. Advantages include capturing non‑linear interactions automatically and scaling to larger feature sets. Challenges are increased training time, risk of overfitting on small datasets, and the need for careful hyperparameter tuning and regularization such as dropout or weight decay.
 
-9. Q: How did you handle class imbalance in the Insurance Claim Analysis project using deep learning techniques?
- A: I applied SMOTE to oversample minority fraud cases and used focal loss during training to focus on hard-to-classify samples. Additionally, I incorporated attention layers to highlight critical claim features, which increased AUC-ROC from 0.72 to 0.89 while maintaining precision.
+9. Q: Explain the concept of transfer learning in deep learning and give an example of how you applied it in your AI School Management project.
+ A: Transfer learning reuses a pre‑trained model’s weights as a starting point for a new task, reducing data and compute requirements. In AI School Management, I fine‑tuned a pre‑trained ResNet on a small dataset of classroom images to detect attendance via face recognition. By freezing early layers and training only the final classifier, I achieved >95% accuracy with only a few hundred labeled images.
 
-10. Q: What strategies did you employ to improve model interpretability in your Real Estate Predictor project?
- A: I used SHAP values to explain feature contributions in the regression model, ensuring stakeholders understood how locality data influenced predictions. Layer-wise relevance propagation (LRP) was also applied to visualize which input variables (e.g., proximity to schools) most impacted profitability estimates.
+10. Q: Discuss how you would evaluate and compare multiple deep learning models for a classification task, including metrics, validation strategies, and computational considerations.
+ A: I would split data into training, validation, and test sets, using stratified k‑fold cross‑validation to estimate generalization. Key metrics include accuracy, precision, recall, F1‑score, and ROC‑AUC, with confusion matrices for error analysis. I would also record training time, GPU memory usage, and inference latency. Models would be compared using statistical tests (e.g., paired t‑test) on validation scores to ensure observed differences are significant.
 
 SHORT-ANSWER:
-1. Q: Which deep learning framework do you prefer for NLP tasks, and why?
- A: Hugging Face Transformers for its pre-trained models and ease of fine-tuning; PyTorch for custom architectures.
+1. Q: What is the main advantage of using a Transformer over an RNN?
+ A: Transformers allow parallel processing of sequence elements and capture long‑range dependencies via self‑attention, leading to faster training and better performance on long sequences.
 
-2. Q: What’s the role of the attention mechanism in Transformers?
- A: It dynamically weights input elements, enabling models to focus on relevant context for accurate sequence processing.
+2. Q: Name two common techniques to mitigate overfitting in deep learning.
+ A: Dropout and L2 weight decay (regularization).
 
-3. Q: How did you use CNNs in the AI School Management project?
- A: For automated attendance via facial recognition using OpenCV and pre-trained ResNet.
+3. Q: Which library did you use for building CNNs in your projects?
+ A: PyTorch and TensorFlow (Keras) were used for CNN implementations.
 
-4. Q: Which activation function did you use in your fraud detection RNNs?
- A: Leaky ReLU to mitigate vanishing gradients and maintain non-linearity.
+4. Q: What is the purpose of the attention mask in transformer models?
+ A: It prevents the model from attending to padding tokens or future tokens during training or inference.
 
-5. Q: What loss function was critical for your Churn Predictor v2?
- A: Focal loss to address class imbalance and focus on misclassified samples.
+5. Q: How do you handle class imbalance in deep learning?
+ A: Use class‑weighted loss, focal loss, or resampling techniques such as SMOTE or random undersampling.
 
-6. Q: How did you deploy deep learning models in production?
- A: Using Streamlit for web apps and ONNX for cross-platform inference optimization.
+6. Q: What is the role of the encoder in an encoder‑decoder model?
+ A: The encoder transforms the input sequence into a contextual representation that the decoder uses to generate the output.
 
-7. Q: What’s the key difference between RNN and Transformer architectures?
- A: Transformers use self-attention for parallel processing, while RNNs process sequences sequentially.
+7. Q: Which optimizer did you use for training your LSTM models?
+ A: Adam optimizer with a learning rate scheduler.
 
-8. Q: Which library did you use for time series forecasting?
- A: PyTorch with LSTMs for sequence modeling and Prophetic for baseline comparisons.
+8. Q: What is prompt engineering?
+ A: Designing and refining prompts to guide language models toward desired outputs.
 
-9. Q: How did you evaluate NLP model performance in the Diet Planner?
- A: BLEU score for text quality and user feedback for practical relevance.
+9. Q: Name a tool you used for visualizing deep learning model performance.
+ A: TensorBoard and Weights & Biases.
 
-10. Q: What’s your go-to tool for visualizing deep learning model outputs?
- A: TensorBoard for training metrics and SHAP for feature importance analysis.
+10. Q: How do you deploy a trained transformer model to production?
+ A: Export the model to ONNX or TorchScript, serve it via a REST API (FastAPI/Flask), and containerize with Docker for scalability.
