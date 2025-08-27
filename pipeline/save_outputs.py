@@ -3,10 +3,11 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Dict
 import time
+import json
 from config import OUTPUT_DIR
 from io_utils.file_io import safe_name, write_text
 from pipeline.qna_generation import qna_to_text
-
+from typing import Dict, Callable, Optional, Any
 
 def save_qna(topic: str, subtopic: str, qna: Dict) -> Path:
     """
@@ -30,53 +31,39 @@ def save_qna(topic: str, subtopic: str, qna: Dict) -> Path:
     return out_path
 
 
-def save_all_qna(topic_tree, resume_text, build_qna_json, progress_callback=None, stop_flag=None):
+def save_all_qna(
+    topic_tree: Dict,
+    resume_text: str,
+    qna_builder: Callable,
+    progress_callback: Callable[[int], None] | None = None,
+    stop_flag: Callable[[], bool] | None = None,
+) -> None:
     """
-    Save QnA JSONs into files, one folder per topic.
-    
+    Save all QnA files for a given topic tree.
+
     Args:
-        topic_tree (dict): Tree of extracted topics.
-        resume_text (str): Extracted resume text.
-        build_qna_json (function): Function to generate QnA for a topic.
-        progress_callback (callable): Called with percentage progress.
-        stop_flag (dict): {"stop": bool} flag to support early stopping.
+        topic_tree (Dict): The topic → subtopics JSON
+        resume_text (str): Resume text context
+        qna_builder (Callable): Function that builds QnA JSON from (resume_text, unit_name)
+        progress_callback (Callable, optional): Function to update progress %
+        stop_flag (Callable, optional): Function returning True if process should stop
     """
     topics = topic_tree.get("topics", [])
-    total = len(topics)
+    total_subs = sum(len(t.get("subtopics", [])) for t in topics)
+    done = 0
 
-    if not OUTPUT_DIR.exists():
-        OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+    for topic in topics:
+        t_name = topic.get("topic", "General")
+        for sub in topic.get("subtopics", []):
+            if stop_flag and stop_flag():  # Stop requested
+                return
 
-    for i, topic in enumerate(topics):
-        # ✅ Stop button pressed
-        if stop_flag and stop_flag.get("stop", False):
-            print("⏹️ Stopping QnA generation early...")
-            break
+            qna = qna_builder(resume_text, sub)
+            save_qna(t_name, sub, qna)
 
-        # Generate QnA JSON for topic
-        qna_json = build_qna_json(topic, resume_text)
+            done += 1
+            if progress_callback:
+                pct = int(done / total_subs * 100)
+                progress_callback(pct)
 
-        # Create topic folder
-        topic_dir = OUTPUT_DIR / topic["title"].replace(" ", "_")
-        topic_dir.mkdir(parents=True, exist_ok=True)
-
-        # Save JSON file
-        json_path = topic_dir / "qna.json"
-        with open(json_path, "w", encoding="utf-8") as f:
-            json.dump(qna_json, f, indent=2, ensure_ascii=False)
-
-        # Save TXT file (QnA in text format)
-        txt_path = topic_dir / "qna.txt"
-        with open(txt_path, "w", encoding="utf-8") as f:
-            for qna in qna_json.get("qna", []):
-                f.write(f"Q: {qna['question']}\n")
-                f.write(f"A: {qna['answer']}\n\n")
-
-        # ✅ Update progress
-        pct = int(((i + 1) / total) * 100)
-        if progress_callback:
-            progress_callback(pct)
-
-    # If finished fully, ensure 100%
-    if progress_callback and not (stop_flag and stop_flag.get("stop", False)):
-        progress_callback(100)
+            time.sleep(0.5)  # Throttle

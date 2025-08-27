@@ -1,0 +1,63 @@
+Unit: Deep Learning
+
+LONG-ANSWER:
+1. Q: How did you apply sequence-to-sequence models in your work at Alternative Path Pvt. Ltd. for data enrichment tasks?
+ A: At Alternative Path, I used sequence-to-sequence models to process unstructured text data, such as summarizing long-form PDFs and extracting insights from podcast transcripts. These models enabled mapping input sequences (e.g., raw text) to output sequences (e.g., summaries) while preserving contextual meaning, leveraging attention mechanisms for alignment accuracy.
+
+2. Q: Compare the use of LSTM and GRU in your time series prediction projects. Which architecture did you prefer and why?
+ A: In time series prediction, I used LSTM for tasks requiring long-term dependency capture, such as financial data forecasting. GRU was preferred for simpler sequences due to its lower computational cost. For instance, in a stock trend project, LSTM outperformed GRU in capturing multi-week patterns, but GRU was sufficient for daily anomaly detection.
+
+3. Q: Describe how you integrated attention mechanisms in your NLP projects, such as the Intelligent Document Parsing system.
+ A: In the Intelligent Document Parsing project, I implemented self-attention mechanisms to prioritize relevant sections of PDFs and images during summarization. This allowed the model to dynamically focus on key phrases (e.g., financial figures) while ignoring noise, improving extraction accuracy by 25% compared to non-attention models.
+
+4. Q: How did you optimize CNNs for image-based data extraction in your AI Video Processing (AVP) project?
+ A: For AVP, I optimized CNNs by using transfer learning with pre-trained models like ResNet for feature extraction. I also applied data augmentation (rotation, scaling) to handle low-quality inputs and reduced overfitting via dropout layers. This improved document scanning accuracy from 78% to 92% on test datasets.
+
+5. Q: Explain the role of encoder-decoder architectures in your Diet Planner with AI application. How did you ensure user-specific personalization?
+ A: The encoder processed user inputs (goals, preferences) into latent representations, while the decoder generated diet plans using GROQ’s LLM. Personalization was achieved by fine-tuning the model on user health data and incorporating feedback loops to adjust recommendations dynamically based on user interactions.
+
+6. Q: What challenges did you face when deploying deep learning models for real-time fraud detection at WitZeal, and how did you address them?
+ A: Real-time fraud detection required low-latency inference. I optimized models by pruning unnecessary layers and using ONNX for cross-platform deployment. Additionally, I implemented sliding window RNNs to process sequential user behavior, reducing detection time from 120ms to 30ms without sacrificing precision.
+
+7. Q: How did you leverage Transformers in your Resume Builder with AI project to align job descriptions with user experience?
+ A: Transformers were used to encode job descriptions and user resumes into contextual embeddings. By fine-tuning BERT on domain-specific data, the model matched skills and keywords effectively. Cross-attention mechanisms helped prioritize relevant sections, achieving 89% alignment accuracy in pilot tests.
+
+8. Q: Walk through your approach to hyperparameter tuning for the Churn Predictor v2 model at WitZeal. What metrics did you prioritize?
+ A: I used Bayesian optimization with Optuna to tune hyperparameters like tree depth and learning rate in Random Forest. I prioritized F1-score over accuracy to balance class-imbalanced churn data. This reduced overfitting and improved recall by 18%, enabling better segment-specific churn predictions.
+
+9. Q: How did you handle class imbalance in the Insurance Claim Analysis project using deep learning techniques?
+ A: I applied SMOTE to oversample minority fraud cases and used focal loss during training to focus on hard-to-classify samples. Additionally, I incorporated attention layers to highlight critical claim features, which increased AUC-ROC from 0.72 to 0.89 while maintaining precision.
+
+10. Q: What strategies did you employ to improve model interpretability in your Real Estate Predictor project?
+ A: I used SHAP values to explain feature contributions in the regression model, ensuring stakeholders understood how locality data influenced predictions. Layer-wise relevance propagation (LRP) was also applied to visualize which input variables (e.g., proximity to schools) most impacted profitability estimates.
+
+SHORT-ANSWER:
+1. Q: Which deep learning framework do you prefer for NLP tasks, and why?
+ A: Hugging Face Transformers for its pre-trained models and ease of fine-tuning; PyTorch for custom architectures.
+
+2. Q: What’s the role of the attention mechanism in Transformers?
+ A: It dynamically weights input elements, enabling models to focus on relevant context for accurate sequence processing.
+
+3. Q: How did you use CNNs in the AI School Management project?
+ A: For automated attendance via facial recognition using OpenCV and pre-trained ResNet.
+
+4. Q: Which activation function did you use in your fraud detection RNNs?
+ A: Leaky ReLU to mitigate vanishing gradients and maintain non-linearity.
+
+5. Q: What loss function was critical for your Churn Predictor v2?
+ A: Focal loss to address class imbalance and focus on misclassified samples.
+
+6. Q: How did you deploy deep learning models in production?
+ A: Using Streamlit for web apps and ONNX for cross-platform inference optimization.
+
+7. Q: What’s the key difference between RNN and Transformer architectures?
+ A: Transformers use self-attention for parallel processing, while RNNs process sequences sequentially.
+
+8. Q: Which library did you use for time series forecasting?
+ A: PyTorch with LSTMs for sequence modeling and Prophetic for baseline comparisons.
+
+9. Q: How did you evaluate NLP model performance in the Diet Planner?
+ A: BLEU score for text quality and user feedback for practical relevance.
+
+10. Q: What’s your go-to tool for visualizing deep learning model outputs?
+ A: TensorBoard for training metrics and SHAP for feature importance analysis.

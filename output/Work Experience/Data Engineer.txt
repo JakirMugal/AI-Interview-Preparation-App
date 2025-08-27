@@ -1,0 +1,63 @@
+Unit: Data Engineer
+
+LONG-ANSWER:
+1. Q: Describe how you designed a multi-source scraping pipeline for a client. What challenges did you face with API debugging, and how did you resolve them?
+ A: I built a unified system to collect data from multiple endpoints of a single website. Challenges included inconsistent API responses and rate-limiting. I resolved these by implementing retry logic, caching, and using Postman for endpoint testing to ensure reliability.
+
+2. Q: How do you handle unstructured data (e.g., PDFs, images) in ETL workflows? Provide an example from your experience.
+ A: I used NLP models like ChatGPT to extract text from PDFs and OCR for images. For instance, I parsed Japanese documents by translating them to English and extracted tabular data from images using OpenCV and Tesseract for downstream analysis.
+
+3. Q: Explain how you optimized query performance in PostgreSQL and Snowflake for a high-volume data pipeline.
+ A: I leveraged SQLAlchemy ORM for schema consistency and indexed frequently queried columns. In Snowflake, I partitioned tables and used clustering keys. For PostgreSQL, I optimized vacuum settings and analyzed query execution plans to reduce latency.
+
+4. Q: Walk through your approach to automating daily/weekly reports for stakeholders. How did you ensure accuracy and timeliness?
+ A: I used Python scripts with great_tables to generate HTML tables and integrated them with email automation. I scheduled workflows via cron jobs and validated outputs with checksums to catch errors before distribution.
+
+5. Q: How would you design a scalable ETL pipeline for time-series data from web scraping and S3? Reference your experience.
+ A: I’d use Airflow for orchestration, store raw data in S3, and process it with Spark for scalability. Timestamp comparison and incremental loading would minimize redundant processing, as done in my work with financial data pipelines.
+
+6. Q: What strategies do you use to ensure data consistency when integrating multiple sources into a single database?
+ A: I employ schema validation during ingestion, use SQLAlchemy’s transactional commits, and implement data lineage tracking. For example, I reconciled discrepancies between web-scraped and S3 data by cross-referencing unique identifiers.
+
+7. Q: How have you applied machine learning models (e.g., NLP) within data engineering workflows? Provide a specific example.
+ A: I integrated sentiment analysis models into pipelines to enrich customer feedback data. For instance, I used Hugging Face’s transformers to classify sentiment scores, which were then joined with structured metrics for portfolio managers.
+
+8. Q: Describe a scenario where you had to troubleshoot a failed ETL job. What tools and methodologies did you use?
+ A: A failed job due to schema drift was resolved by adding dynamic schema validation. I used logging in Python and Airflow’s XCom to trace errors, then updated the pipeline to handle new fields via conditional transformations.
+
+9. Q: How do you approach data enrichment tasks like timestamp comparison or document summarization in your pipelines?
+ A: For timestamp comparison, I use Pandas’ datetime functions to align time zones. For summarization, I leverage LangChain with Groq’s LLMs to condense long-form documents, ensuring summaries are concise and retain key insights for downstream analysis.
+
+10. Q: What tools and techniques do you use to monitor and maintain data pipeline reliability in production?
+ A: I use Prometheus for metrics and Grafana for dashboards. For alerting, I set up Slack notifications via Webhooks for Airflow failures. Regular health checks and automated retries ensure pipelines self-heal from transient issues.
+
+SHORT-ANSWER:
+1. Q: What role does SQLAlchemy play in your ETL processes?
+ A: SQLAlchemy ORM simplifies database interactions by abstracting schema definitions and ensuring type-safe queries during data transformation.
+
+2. Q: List three tools you’ve used for web scraping.
+ A: Selenium, Playwright, and Beautiful Soup.
+
+3. Q: How do you handle missing or inconsistent data in pipelines?
+ A: I use Pandas’ fillna() with domain-specific defaults and apply schema validation rules during ingestion.
+
+4. Q: Which cloud platforms have you worked with for data engineering?
+ A: Google BigQuery and Vertex AI for cloud-based data processing and model integration.
+
+5. Q: What BI tools are you proficient in?
+ A: Google Data Studio, Tableau, and Power BI for visualization and dashboarding.
+
+6. Q: How do you automate report distribution to stakeholders?
+ A: I use Python’s smtplib for email automation and schedule tasks with cron or Airflow.
+
+7. Q: What’s the purpose of ORM in database interactions?
+ A: ORM maps database tables to code objects, reducing boilerplate SQL and improving code maintainability.
+
+8. Q: Which NLP libraries have you integrated into data workflows?
+ A: Hugging Face Transformers and OpenCV for text/image processing in ETL pipelines.
+
+9. Q: How do you version control data pipeline code?
+ A: I use Git with GitHub for collaborative development and CI/CD pipelines for deployment.
+
+10. Q: What’s your approach to data validation in pipelines?
+ A: I implement schema checks using Great Expectations and validate data types during ingestion.

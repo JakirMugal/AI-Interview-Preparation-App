@@ -1,0 +1,63 @@
+Unit: Data Scientist
+
+LONG-ANSWER:
+1. Q: Describe your approach to building the Churn Predictor v2 at WitZeal Technology. How did user segmentation improve model performance?
+ A: I segmented users based on behavioral patterns and transaction history, then applied Random Forest with hyperparameter tuning to each segment. This approach reduced churn by 40% by capturing nuanced patterns that a single model might miss, compared to Churn Predictor v1 which used a unified model.
+
+2. Q: How did you leverage NLP for intelligent document parsing at Alternative Path Pvt. Ltd.? What challenges did you face?
+ A: I used ChatGPT and custom NLP models to summarize PDFs, extract tabular data from images, and translate Japanese documents. Challenges included handling unstructured layouts and multilingual text, which I addressed with OCR preprocessing and prompt engineering for context-aware summarization.
+
+3. Q: Explain your ETL pipeline design for multi-source data integration at Alternative Path. How did you ensure data consistency?
+ A: I built Python-based pipelines using SQLAlchemy ORM to ingest data from APIs, S3, and emails. Data consistency was enforced via schema validation, incremental loading, and checksum comparisons between source and destination databases like PostgreSQL and Snowflake.
+
+4. Q: What strategies did you use to improve medical data classification accuracy from 60% to 95% in your 'Enhance Accuracy' project?
+ A: I applied Random Forest with hyperparameter tuning, feature engineering (PCA), and cross-validation. I also optimized the class imbalance using SMOTE and iteratively refined the model by analyzing confusion matrices and feature importances.
+
+5. Q: How did you automate reporting for portfolio managers at Alternative Path? What tools did you use?
+ A: I generated HTML tables with great_tables, integrated dashboard screenshots from Power BI, and automated email delivery using Python scripts. Reports were stored in S3 buckets for version control, ensuring stakeholders received consistent, actionable insights daily.
+
+6. Q: Walk through your process for designing the Diet Planner with AI. How did GROQ and Streamlit contribute?
+ A: I used GROQ's LLM to generate personalized diet plans based on user inputs like health goals and allergies. Streamlit created an interactive web interface for real-time feedback, while Python handled backend logic for recipe recommendations and nutritional analysis.
+
+7. Q: What role did CleverTap play in your customer retention strategies at Voosh Food Tech?
+ A: CleverTap segmented users based on order frequency and preferences. I designed personalized campaigns (e.g., discounts on underperforming items) that boosted retention by 16.43%. Behavioral funnels helped identify drop-off points in the customer journey.
+
+8. Q: How did you apply the Apriori algorithm for combo analysis at Voosh? What business impact did it have?
+ A: I analyzed transaction data to identify frequently co-purchased items, generating combo recommendations. This improved upselling opportunities and increased the menu-to-order conversion ratio from 7% to 11.6% by aligning promotions with customer preferences.
+
+9. Q: Explain your fraud detection approach for cashback abuse at WitZeal. How did behavioral pattern recognition work?
+ A: I built a Python algorithm to flag anomalies in user behavior, such as sudden spikes in cashback claims or repetitive transaction patterns. Features like login frequency and claim timing were analyzed using clustering to distinguish legitimate vs. fraudulent activity.
+
+10. Q: How did you optimize the Menu Engineering algorithm at Voosh using Levenshtein Distance?
+ A: I used Levenshtein Distance to measure similarity between menu items and customer search terms, improving pattern matching accuracy to 82%. This helped optimize menu visibility and reduce customer search friction, directly boosting order conversion rates.
+
+SHORT-ANSWER:
+1. Q: Which ML models have you deployed in production?
+ A: Random Forest, SVM, K-Means, and NLP models via LangChain and Hugging Face.
+
+2. Q: How do you handle missing data in time series?
+ A: I use forward-fill, interpolation, or domain-specific imputation based on context.
+
+3. Q: What tools do you use for web scraping?
+ A: Selenium, Playwright, Beautiful Soup, and Scrapy with anti-bot strategies.
+
+4. Q: What's your experience with cloud platforms?
+ A: Google Vertex AI, BigQuery, and AWS S3 for data storage and model deployment.
+
+5. Q: How do you validate a machine learning model?
+ A: Cross-validation, F1-score, ROC-AUC, and confusion matrix analysis.
+
+6. Q: Which NLP libraries do you prefer?
+ A: Hugging Face Transformers, spaCy, and custom prompt engineering with GROQ.
+
+7. Q: What's your approach to A/B testing?
+ A: Define hypotheses, segment users, measure KPIs, and analyze statistical significance.
+
+8. Q: How do you handle large datasets?
+ A: Distributed processing with Dask, database partitioning, and feature selection.
+
+9. Q: What's your experience with customer engagement platforms?
+ A: CleverTap and WebEngage for segmentation, push notifications, and campaign analytics.
+
+10. Q: What's your strongest technical skill?
+ A: End-to-end ML pipeline development from data ingestion to deployment.

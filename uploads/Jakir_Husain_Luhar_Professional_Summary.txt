@@ -1,0 +1,127 @@
+Jakir Husain Luhar – Complete Professional Summary
+________________
+
+Contact Information
+* Email: jakirmugal7867@gmail.com
+* Phone: +91 8209391480
+* Location: Jaipur, India
+* LinkedIn: linkedin.com/in/thejakirhusain
+* GIT: https://github.com/JakirMugal
+________________
+
+Education
+* B.Tech in Computer Science, Engineering College Bikaner, 2017–2021 – 75%
+* Senior Secondary (XII), RBSE Board – 81%
+* Secondary (X), RBSE Board – 81%
+________________
+
+Technical Skills
+* Large Language Models & Generative AI:
+ LLMs, Prompt Engineering, LangChain, Hugging Face, Groq, MCP (Model Context Protocol)
+* Deep Learning & Sequence Models:
+ ANN, CNN, RNN, GRU, LSTM, Encoder-Decoder, Sequence-to-Sequence Models, Attention Mechanism, Transformers, Time Series Prediction, NLP
+* Machine Learning:
+ EDA, Hypothesis Testing, Polynomial & Logistic Regression, Naive Bayes, SVM, Decision Tree, Random Forest, Recommendation Systems
+* Libraries & Frameworks:
+ Pandas, NumPy, Scikit-learn, OpenCV, Streamlit, SQLAlchemy
+* Programming Languages:
+ Python (Advanced), SQL
+* Databases:
+ PostgreSQL, Snowflake, MySQL, MongoDB
+* Web Scraping & API Tools:
+ Selenium, Playwright, Beautiful Soup, Requests, Scrapy, Postman
+* BI & Visualization Tools:
+ Google Data Studio, Tableau, Power BI
+* AutoML & Cloud Platforms:
+ Google Vertex AI, BigQuery
+* Customer Engagement Platforms:
+ CleverTap, WebEngage
+________________
+
+Soft Skills
+   * Leadership (Full Professional Proficiency)
+   * Problem-Solving (Native or Bilingual Proficiency)
+   * Logical Thinking (Native or Bilingual Proficiency)
+   * Multi-tasking (Full Professional Proficiency)
+________________
+
+Certifications
+   * Machine Learning – Internshala
+   * Python (20+ Projects) – Udemy
+   * Deep Learning – Udemy
+   * Machine Learning – Udemy
+   * Basics of R Programming – Udemy
+   * C++ Developer – Samyak IT Solutions Pvt. Ltd.
+________________
+
+Work Experience
+Data Engineer–Alternative Path Pvt. Ltd., Gurgaon (Dec 2023 – present)
+Service-Based Organization (Client: Asset Management Company)
+Responsibilities:
+   * Developed and maintained data pipelines to ingest data from diverse sources including web scraping (APIs and HTML), third-party vendors via Amazon S3, and email attachments.
+   * Transformed, cleaned, and loaded structured and unstructured data into databases such as PostgreSQL and Snowflake using SQLAlchemy and Python-based ETL processes.
+   * Performed downstream data enrichment including sentiment analysis, timestamp comparison, and extracting key insights using custom logic and NLP models.
+   * Automated the distribution of processed data and insights to portfolio managers via email (HTML tables using great_tables) and S3 bucket integration.
+
+Key Projects & Achievements:
+   * Multi-source Scraping Pipeline: Designed a unified scraping system to collect data from multiple endpoints/APIs of a single website efficiently. Gained expertise in debugging complex web APIs.
+   * Database Integration: Built seamless workflows to store processed data into PostgreSQL and Snowflake using SQLAlchemy ORM, ensuring data consistency and optimal query performance.
+   * Intelligent Document Parsing: Leveraged ChatGPT and other NLP tools to:
+      * Summarize long-form PDFs and Japanese documents (translated and converted to English PDFs).
+      * Extract tabular and chart-based data from images.
+      * Generate insights from podcast transcripts.
+   * Automated Reporting: Automated the generation and delivery of daily/weekly reports with dashboard screenshots and summary tables sent to stakeholders using email automation and visualization tools.
+
+Data Scientist – WitZeal Technology Pvt. Ltd., Gurgaon (Oct 2022 – Nov 2023)
+   * Created a Retention Engine using clustering (K-Means with PyCluster) and bonus allocation logic. Measured success via F-score, resulting in a 15–22% boost in 30-day user retention.
+   * Developed fraud detection algorithms to prevent abuse of cashback bonuses using behavioral pattern recognition in Python.
+   * Built Funnels on CleverTap to track and improve user conversion flows. PMs reported 2–3% gains in efficiency.
+   * Created Churn Predictor v1 for new users based on 7-day behavioral analysis using Random Forest with hyperparameter tuning.
+   * Created Churn Predictor v2 by segmenting users and then predicting churn behavior per segment. This model helped reduce churn by 40%.
+   * Automated Power BI dashboards that visualized retention and engagement reports using Python, saving PMs an hour daily.
+   * Fraud Deduction: Developed Python algorithm to detect and prevent fraudulent activities related to cashback.
+
+Data Scientist – Voosh Food Tech Pvt. Ltd., Bangalore (Oct 2021 – Oct 2022)
+   * Built a Menu Engineering algorithm using Levenshtein Distance and NLP, achieving 82% accuracy in pattern matching.
+   * Designed ETL pipelines using Selenium and Python to collect data from multiple sources, storing it in MongoDB for analysis.
+   * Applied Naive Bayes for Cuisine Classification, Apriori Algorithm for combo analysis, and performed extensive competitor analytics.
+   * Created automated pipelines in Python for Google BigQuery transformation and load tasks.
+   * Boosted customer retention by 16.43% through personalized campaigns using CleverTap & WebEngage.
+   * Enabled marketing insights that improved the Menu-to-Order conversion ratio from 7% to 11.6%.
+   * Delivered KPI dashboards using Google Data Studio and Power BI for sales, NPS, funnel tracking, and root cause analysis.
+
+Freelance Data Scientist (Apr 2018 – Oct 2021)
+   * Delivered 50+ ML projects and 300+ Python Selenium-based scraping jobs for businesses and researchers.
+   * Built visual dashboards using Google Data Studio, supporting daily reports and business decisions.
+________________
+
+Internships
+   * MVG Innovation (Aug 2021 – Oct 2021): Developed School Automation and Movie Box Office Prediction models (70% accuracy using SVM & RF).
+   * Digiblitz Labs (Jun 2021 – Aug 2021): Designed, developed, and trained various data science models across industries.
+   * The Spark Foundation (Jan 2021 – Feb 2021): Solved 8 diverse ML problems; documented solutions via GitHub, YouTube, LinkedIn.
+   * G.K. Software Solutions (2018 – 2021): Delivered freelance projects (ML, scraping, dashboarding).
+________________
+
+Projects
+* Diet Planer with AI: Python-based web application that uses GROQ and Streamlit to generate personalized diet plans based on user preferences, goals, and health information. It leverages the power of AI to make nutrition planning simple, interactive, and effective.
+   🔗 GitHub: https://github.com/JakirMugal/diet-plan-with-ai | Live App: https://diet-plan-with-ai-hjfqvyqpxwi5paj9lzx3pg.streamlit.app/
+
+* Resume Builder using AI: A smart resume generator that builds customized resumes based on LinkedIn job descriptions and your experience using AI.
+   🔗 GitHub: https://github.com/JakirMugal/resume-builder-with-ai | Live App: https://resume-builder-with-ai-by-jakir.streamlit.app/
+
+* AI School Management (ASM): Built automated attendance and AI-enabled library system using OpenCV & Deep Learning.
+* AI Video Processing (AVP): Web app for background/foreground estimation, panorama stitching, and document scanning.
+* Automated Model Selection: Tool that outputs the best classification model by comparing metric + complexity trade-offs.
+* Enhance Accuracy: Applied Random Forest and hyperparameter tuning to improve medical data classification accuracy from 60% to 95%.
+* Smart & Secure Parking System: Used ML, IoT, OpenCV to develop license plate-based entry/exit and monitoring system.
+* Real Estate Predictor: Model visualizes optimal architectural choices based on locality-specific data to enhance profitability.
+* Insurance Claim Analysis: Built fraud analysis pipeline to detect claim issues—vehicle or part quality.
+* Kaggle Walmart Forecast: EDA on item-level data, sales prediction model to optimize store inventory.
+________________
+
+Achievements
+   * Finalist – TechGig Code Gladiators
+   * 1st Rank – Analytics Vidhya Challenge by Internshala
+   * 1st Rank – College Wall Decoration Competition
+   * Co-founder – Technical Club “AARON”
+   * Represented college in Badminton at IIT Roorkee and participated in workshops by NIT Kurukshetra, Govt of Rajasthan
