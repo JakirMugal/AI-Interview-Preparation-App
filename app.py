@@ -2,6 +2,7 @@ import streamlit as st
 from pathlib import Path
 import tempfile
 import shutil
+import time
 
 from io_utils.text_extract import extract_text_any
 from pipeline.topic_extraction import get_topic_tree
@@ -9,68 +10,70 @@ from pipeline.qna_generation import build_qna_json
 from pipeline.save_outputs import save_all_qna
 from io_utils.zipping import zip_dir
 from pipeline.tts_convert import txt_to_mp3_tree
-
 from config import OUTPUT_DIR
 
 
-# ---------------------------
-# UI: Step Table
-# ---------------------------
-def init_step_table():
-    """Initialize placeholders for steps table (only once)."""
-    if "step_placeholders" not in st.session_state:
-        st.session_state.step_placeholders = {}
+# ---------------------------------
+# Step placeholders manager
+# ---------------------------------
+def init_steps():
+    steps = [
+        {"name": "Extracting Topics"},
+        {"name": "Building Q&A JSON"},
+        {"name": "Clearing Old Outputs"},
+        {"name": "Saving Q&A Files"},
+        {"name": "Generating Audio (MP3s)"},
+        {"name": "Creating Text ZIP"},
+        {"name": "Creating Audio ZIP"},
+        {"name": "Creating Combined ZIP"},
+    ]
+    placeholders = {}
+    table = st.container()
 
-        steps = ["Extracting Topics", "Clearing Old Outputs", "Saving QnA Files", "Creating ZIPs"]
+    with table:
+        cols = st.columns([2, 2, 4, 2])
+        cols[0].markdown("**Step**")
+        cols[1].markdown("**Status**")
+        cols[2].markdown("**Progress**")
+        cols[3].markdown("**Action**")
+
         for step in steps:
-            container = st.container()
-            col1, col2, col3, col4, col5 = container.columns([2, 2, 4, 1, 2])
-            with col1: st.markdown(f"**{step}**")
-            with col2: status = st.empty()
-            with col3: bar = st.progress(0)
-            with col4: pct = st.empty()
-            with col5: btn = st.empty()
-            st.session_state.step_placeholders[step] = {
-                "status": status,
-                "bar": bar,
-                "pct": pct,
-                "btn": btn,
+            c1, c2, c3, c4 = st.columns([2, 2, 4, 2])
+            placeholders[step["name"]] = {
+                "status": c2.empty(),
+                "progress": c3.progress(0),
+                "pct": c3.empty(),
+                "btn": c4.empty(),
             }
+            c1.markdown(f"**{step['name']}**")
+
+    return steps, placeholders
 
 
-def update_step(step, status, progress, show_stop=False):
-    """Update row for a step."""
-    placeholders = st.session_state.step_placeholders[step]
-
-    # status text
+def update_step(step_name, status, pct, placeholders, stop_flag, show_stop=False):
+    """Update one row of the step table"""
     if status == "waiting":
-        placeholders["status"].markdown("⏳ Waiting")
+        placeholders[step_name]["status"].markdown("⏳ Waiting")
     elif status == "running":
-        placeholders["status"].markdown("🔄 Running")
+        placeholders[step_name]["status"].markdown("🔄 Running")
     elif status == "done":
-        placeholders["status"].markdown("✅ Done")
-    elif status == "stopped":
-        placeholders["status"].markdown("⏹ Stopped")
+        placeholders[step_name]["status"].markdown("✅ Done")
 
-    # progress
-    placeholders["bar"].progress(progress)
-    placeholders["pct"].markdown(f"{progress}%")
+    placeholders[step_name]["progress"].progress(pct)
+    placeholders[step_name]["pct"].markdown(f"{pct}%")
 
-    # stop button only for QnA
-    if show_stop and status == "running":
-        if placeholders["btn"].button("⏹ Stop", key="stop_btn"):
-            st.session_state.stop_qna = True
-    else:
-        placeholders["btn"].empty()
+    if show_stop and not stop_flag.get("stop", False):
+        if placeholders[step_name]["btn"].button("⏹ Stop", key=f"stop_btn_{step_name}"):
+            stop_flag["stop"] = True
 
 
-# ---------------------------
-# Main
-# ---------------------------
+# ---------------------------------
+# Main App
+# ---------------------------------
 def main():
     st.title("🤖 AI Interview Preparation")
 
-    # Initialize state
+    # Session state
     if "resume_text" not in st.session_state:
         st.session_state.resume_text = None
     if "topic_tree" not in st.session_state:
@@ -83,8 +86,6 @@ def main():
         st.session_state.zip_both = None
     if "processing_done" not in st.session_state:
         st.session_state.processing_done = False
-    if "stop_qna" not in st.session_state:
-        st.session_state.stop_qna = False
 
     uploaded_file = st.file_uploader("Upload your Resume (txt/pdf/docx)", type=["txt", "pdf", "docx"])
 
@@ -102,100 +103,101 @@ def main():
         if st.button("Generate Questions") and not st.session_state.processing_done:
             st.info("Processing your resume… this may take a while.")
 
-            # init fixed table
-            init_step_table()
+            steps, placeholders = init_steps()
+            stop_flag = {"stop": False}
 
-            # ---------------------------
-            # STEP 1: Extract topics
-            # ---------------------------
-            update_step("Extracting Topics", "running", 0)
+            # STEP 1: Extract Topics
+            step = "Extracting Topics"
+            update_step(step, "running", 10, placeholders, stop_flag)
             topic_tree = get_topic_tree(
                 st.session_state.resume_text,
-                progress_callback=lambda pct: update_step("Extracting Topics", "running", pct),
+                progress_callback=lambda pct: update_step(step, "running", pct, placeholders, stop_flag),
             )
-            topic_tree["topics"] = topic_tree["topics"][:1]  # sample topics
+            topic_tree["topics"] = topic_tree["topics"][:1]  # limit for testing
             st.session_state.topic_tree = topic_tree
-            update_step("Extracting Topics", "done", 100)
+            update_step(step, "done", 100, placeholders, stop_flag)
 
-            # ---------------------------
-            # STEP 2: Clear outputs
-            # ---------------------------
-            update_step("Clearing Old Outputs", "running", 50)
+            # STEP 2: Build Q&A JSON
+            step = "Building Q&A JSON"
+            update_step(step, "running", 50, placeholders, stop_flag)
+            _ = build_qna_json("dummy_topic", st.session_state.resume_text)  # preview run
+            time.sleep(1)
+            update_step(step, "done", 100, placeholders, stop_flag)
+
+            # STEP 3: Clear outputs
+            step = "Clearing Old Outputs"
+            update_step(step, "running", 30, placeholders, stop_flag)
             if OUTPUT_DIR.exists():
                 shutil.rmtree(OUTPUT_DIR)
             OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-            update_step("Clearing Old Outputs", "done", 100)
+            time.sleep(1)
+            update_step(step, "done", 100, placeholders, stop_flag)
 
-            # ---------------------------
-            # STEP 3: Generate QnA
-            # ---------------------------
-            update_step("Saving QnA Files", "running", 0, show_stop=True)
-
-            def stop_flag():
-                return st.session_state.stop_qna
-
+            # STEP 4: Save QnA
+            step = "Saving Q&A Files"
+            update_step(step, "running", 0, placeholders, stop_flag, show_stop=True)
             save_all_qna(
                 topic_tree,
                 st.session_state.resume_text,
                 build_qna_json,
-                progress_callback=lambda pct: update_step(
-                    "Saving QnA Files",
-                    "running" if not st.session_state.stop_qna else "stopped",
-                    pct,
-                    show_stop=True,
-                ),
+                progress_callback=lambda pct: update_step(step, "running", pct, placeholders, stop_flag, show_stop=True),
                 stop_flag=stop_flag,
             )
+            update_step(step, "done", 100, placeholders, stop_flag)
 
-            if st.session_state.stop_qna:
-                update_step("Saving QnA Files", "stopped", 100)
-            else:
-                update_step("Saving QnA Files", "done", 100)
-
-            # ---------------------------
-            # STEP 4: Zip results
-            # ---------------------------
-            update_step("Creating ZIPs", "running", 30)
-
-            # text zip
-            zip_text = zip_dir(Path(OUTPUT_DIR), Path("interview_qna_texts.zip"))
-            st.session_state.zip_text = zip_text
-
-            # audio zip
+            # STEP 5: Generate Audio
+            step = "Generating Audio (MP3s)"
+            update_step(step, "running", 50, placeholders, stop_flag)
             audio_dir = OUTPUT_DIR.parent / "audio_output"
             if audio_dir.exists():
                 shutil.rmtree(audio_dir)
             audio_dir.mkdir(parents=True, exist_ok=True)
             txt_files = list(OUTPUT_DIR.rglob("*.txt"))
             txt_to_mp3_tree(txt_files, OUTPUT_DIR, audio_dir)
-            zip_audio = zip_dir(Path(audio_dir), Path("interview_qna_audio.zip"))
-            st.session_state.zip_audio = zip_audio
+            update_step(step, "done", 100, placeholders, stop_flag)
 
-            # both zip
+            # STEP 6: Create Text ZIP
+            step = "Creating Text ZIP"
+            update_step(step, "running", 50, placeholders, stop_flag)
+            zip_text = zip_dir(Path(OUTPUT_DIR), Path("interview_qna_texts.zip"))
+            st.session_state.zip_text = zip_text
+            update_step(step, "done", 100, placeholders, stop_flag)
+
+            # STEP 7: Create Audio ZIP
+            step = "Creating Audio ZIP"
+            update_step(step, "running", 50, placeholders, stop_flag)
+            zip_audio = zip_dir(audio_dir, Path("interview_qna_audio.zip"))
+            st.session_state.zip_audio = zip_audio
+            update_step(step, "done", 100, placeholders, stop_flag)
+
+            # STEP 8: Create Combined ZIP
+            step = "Creating Combined ZIP"
+            update_step(step, "running", 50, placeholders, stop_flag)
             both_dir = OUTPUT_DIR.parent / "both_output"
             if both_dir.exists():
                 shutil.rmtree(both_dir)
             both_dir.mkdir(parents=True, exist_ok=True)
-            shutil.copy(zip_text, both_dir / Path(zip_text).name)
-            shutil.copy(zip_audio, both_dir / Path(zip_audio).name)
-            zip_both = zip_dir(both_dir, Path("interview_qna_texts_and_audio.zip"))
+            shutil.copy(zip_text, both_dir / "interview_qna_texts.zip")
+            shutil.copy(zip_audio, both_dir / "interview_qna_audio.zip")
+            zip_both = zip_dir(both_dir, Path("interview_qna_texts+audio.zip"))
             st.session_state.zip_both = zip_both
-
-            update_step("Creating ZIPs", "done", 100)
+            update_step(step, "done", 100, placeholders, stop_flag)
 
             st.session_state.processing_done = True
 
-        # ---------------------------
         # Downloads
-        # ---------------------------
         if st.session_state.processing_done:
             st.success("✅ All questions generated!")
-            with open(st.session_state.zip_text, "rb") as f:
-                st.download_button("⬇️ Download Text (ZIP)", f, file_name="interview_qna_texts.zip")
-            with open(st.session_state.zip_audio, "rb") as f:
-                st.download_button("🎧 Download Audio (ZIP)", f, file_name="interview_qna_audio.zip")
-            with open(st.session_state.zip_both, "rb") as f:
-                st.download_button("📦 Download TEXT + MP3 (ZIP)", f, file_name="interview_qna_texts_and_audio.zip")
+            c1, c2, c3 = st.columns(3)
+            with c1:
+                with open(st.session_state.zip_text, "rb") as f:
+                    st.download_button("Download Text (ZIP)", f, file_name="interview_qna_texts.zip")
+            with c2:
+                with open(st.session_state.zip_audio, "rb") as f:
+                    st.download_button("Download MP3 (ZIP)", f, file_name="interview_qna_audio.zip")
+            with c3:
+                with open(st.session_state.zip_both, "rb") as f:
+                    st.download_button("Download TEXT + MP3 (ZIP)", f, file_name="interview_qna_texts+audio.zip")
 
 
 if __name__ == "__main__":
