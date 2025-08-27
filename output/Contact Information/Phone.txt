@@ -1,0 +1,75 @@
+Unit: Phone
+
+LONG-ANSWER:
+1. Q: Describe a situation where you had to troubleshoot a phone-related issue in your previous role as a Data Engineer at Alternative Path Pvt. Ltd. How did you resolve the issue and what was the outcome?
+ A: In my previous role, I encountered an issue where the automated reporting system was not sending emails to stakeholders. I used my problem-solving skills to identify the root cause of the issue, which was a misconfigured email server. I worked with the IT team to resolve the issue, and we were able to send the reports successfully. The outcome was a significant improvement in stakeholder satisfaction and a reduction in reporting delays.
+
+2. Q: Can you walk me through your experience with phone-based data collection and processing in your previous role as a Data Scientist at WitZeal Technology Pvt. Ltd.? How did you design and implement the data pipelines?
+ A: In my previous role, I designed and implemented data pipelines to collect data from multiple sources, including phone-based APIs and web scraping. I used Python and libraries such as Selenium and Beautiful Soup to collect and process the data. I also used data visualization tools such as Power BI to create dashboards and reports for stakeholders.
+
+3. Q: Describe a situation where you had to communicate complex technical information to a non-technical stakeholder using a phone call. How did you approach the communication and what was the outcome?
+ A: In my previous role, I had to communicate with a portfolio manager who was not familiar with technical details. I used simple language and analogies to explain the technical concepts, and I also provided visual aids such as diagrams and charts to support my explanation. The outcome was a successful communication and a clear understanding of the technical information by the stakeholder.
+
+4. Q: Can you describe your experience with phone-based customer engagement platforms such as CleverTap and WebEngage? How did you use these platforms in your previous roles?
+ A: In my previous roles, I used CleverTap and WebEngage to design and implement customer engagement campaigns. I used these platforms to create funnels, track user behavior, and send personalized messages to customers. I also used these platforms to analyze customer data and create targeted marketing campaigns.
+
+5. Q: Describe a situation where you had to work with a team to resolve a phone-related issue in your previous role as a Data Engineer at Alternative Path Pvt. Ltd. How did you collaborate with the team and what was the outcome?
+ A: In my previous role, I worked with a team to resolve an issue with the automated reporting system. We used collaboration tools such as Slack and Trello to communicate and track progress. We also used our problem-solving skills to identify the root cause of the issue and worked together to resolve it. The outcome was a successful resolution of the issue and a significant improvement in stakeholder satisfaction.
+
+6. Q: Can you walk me through your experience with phone-based data visualization tools such as Google Data Studio and Tableau? How did you use these tools in your previous roles?
+ A: In my previous roles, I used Google Data Studio and Tableau to create data visualizations and dashboards for stakeholders. I used these tools to create interactive and dynamic visualizations that helped stakeholders understand complex data insights.
+
+7. Q: Describe a situation where you had to make a phone call to a stakeholder to discuss a technical issue. How did you approach the call and what was the outcome?
+ A: In my previous role, I made a phone call to a portfolio manager to discuss a technical issue with the automated reporting system. I used a clear and concise approach to explain the issue and proposed solutions. I also used active listening skills to understand the stakeholder's concerns and needs. The outcome was a successful communication and a clear understanding of the technical issue by the stakeholder.
+
+8. Q: Can you describe your experience with phone-based project management tools such as Asana and Trello? How did you use these tools in your previous roles?
+ A: In my previous roles, I used Asana and Trello to manage projects and tasks. I used these tools to create boards, lists, and cards to track progress and collaborate with team members. I also used these tools to assign tasks and set deadlines.
+
+9. Q: Describe a situation where you had to work with a team to design and implement a phone-based data pipeline in your previous role as a Data Engineer at Alternative Path Pvt. Ltd. How did you collaborate with the team and what was the outcome?
+ A: In my previous role, I worked with a team to design and implement a data pipeline to collect data from multiple sources. We used collaboration tools such as Slack and Trello to communicate and track progress. We also used our problem-solving skills to identify the root cause of issues and worked together to resolve them. The outcome was a successful implementation of the data pipeline and a significant improvement in data quality.
+
+10. Q: Can you walk me through your experience with phone-based machine learning models and how you used them in your previous roles?
+ A: In my previous roles, I used machine learning models to analyze customer data and create targeted marketing campaigns. I used libraries such as Scikit-learn and TensorFlow to build and train the models. I also used data visualization tools such as Power BI to create dashboards and reports for stakeholders.
+
+11. Q: Can you describe your experience with phone-based data quality checks?
+ A: I have experience with phone-based data quality checks using libraries such as Pandas and NumPy.
+
+12. Q: Can you describe your experience with phone-based data visualization best practices?
+ A: I have experience with phone-based data visualization best practices using tools such as Google Data Studio and Tableau.
+
+13. Q: Can you describe your experience with phone-based data storytelling?
+ A: I have experience with phone-based data storytelling using tools such as Power BI and Tableau.
+
+14. Q: Can you describe your experience with phone-based data analysis?
+ A: I have experience with phone-based data analysis using libraries such as Pandas and NumPy.
+
+SHORT-ANSWER:
+1. Q: What is your experience with phone-based data collection and processing?
+ A: I have experience with phone-based data collection and processing using Python and libraries such as Selenium and Beautiful Soup.
+
+2. Q: Can you describe your experience with phone-based customer engagement platforms?
+ A: I have experience with phone-based customer engagement platforms such as CleverTap and WebEngage.
+
+3. Q: What is your experience with phone-based data visualization tools?
+ A: I have experience with phone-based data visualization tools such as Google Data Studio and Tableau.
+
+4. Q: Can you describe your experience with phone-based project management tools?
+ A: I have experience with phone-based project management tools such as Asana and Trello.
+
+5. Q: What is your experience with phone-based machine learning models?
+ A: I have experience with phone-based machine learning models using libraries such as Scikit-learn and TensorFlow.
+
+6. Q: Can you describe your experience with phone-based data pipelines?
+ A: I have experience with phone-based data pipelines using Python and libraries such as Pandas and NumPy.
+
+7. Q: What is your experience with phone-based data quality checks?
+ A: I have experience with phone-based data quality checks using libraries such as Pandas and NumPy.
+
+8. Q: Can you describe your experience with phone-based data visualization best practices?
+ A: I have experience with phone-based data visualization best practices using tools such as Google Data Studio and Tableau.
+
+9. Q: Can you describe your experience with phone-based data storytelling?
+ A: I have experience with phone-based data storytelling using tools such as Power BI and Tableau.
+
+10. Q: Can you describe your experience with phone-based data analysis?
+ A: I have experience with phone-based data analysis using libraries such as Pandas and NumPy.

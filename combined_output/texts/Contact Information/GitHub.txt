@@ -1,0 +1,66 @@
+Unit: GitHub
+
+LONG-ANSWER:
+1. Q: Describe your experience with GitHub and how you have utilized it in your projects and professional endeavors. Provide specific examples from your resume/profile.
+ A: I have been actively using GitHub since my freelance data scientist days (Apr 2018 – Oct 2021), where I delivered 50+ ML projects and 300+ Python Selenium-based scraping jobs for businesses and researchers. I have also utilized GitHub for my internships, such as The Spark Foundation (Jan 2021 – Feb 2021), where I solved 8 diverse ML problems and documented solutions via GitHub, YouTube, and LinkedIn. In my current role as a Data Engineer at Alternative Path Pvt. Ltd., I have maintained data pipelines and automated the distribution of processed data and insights to portfolio managers via email and S3 bucket integration, all while utilizing GitHub for version control and collaboration.
+
+2. Q: How do you ensure that your GitHub repositories are well-organized, readable, and maintainable? Can you provide an example from one of your projects?
+ A: To ensure that my GitHub repositories are well-organized, readable, and maintainable, I follow a consistent naming convention for folders and files, use clear and descriptive commit messages, and regularly refactor code to improve readability and maintainability. For example, in my 'Diet Planer with AI' project, I used a clear folder structure with separate directories for the web application, AI model, and data processing scripts, and made sure to include detailed comments and documentation throughout the code.
+
+3. Q: Can you walk us through your process for creating a new GitHub repository and setting up a project structure? How do you handle version control and collaboration?
+ A: When creating a new GitHub repository, I start by setting up a clear project structure with separate folders for the code, data, and documentation. I then initialize a Git repository and create a README file to provide an overview of the project. For version control, I use Git branches to separate development and production code, and regularly merge changes using pull requests. For collaboration, I use GitHub's built-in features such as issue tracking, pull requests, and code reviews to ensure that all team members are on the same page.
+
+4. Q: How do you handle conflicts or merge issues when working on a GitHub repository with multiple contributors? Can you provide an example from one of your projects?
+ A: When working on a GitHub repository with multiple contributors, I use GitHub's built-in conflict resolution tools, such as the 'merge' and 'rebase' commands, to resolve conflicts and merge changes. For example, in my 'Diet Planer with AI' project, I had to resolve a conflict between two contributors who had made changes to the same file. I used the 'merge' command to resolve the conflict and then pushed the updated code to the repository.
+
+5. Q: Can you describe your experience with GitHub Actions and how you have utilized it in your projects? Provide specific examples from your resume/profile.
+ A: I have been using GitHub Actions since my current role as a Data Engineer at Alternative Path Pvt. Ltd. (Dec 2023 – present), where I have automated the distribution of processed data and insights to portfolio managers via email and S3 bucket integration using GitHub Actions. I have also used GitHub Actions to automate testing and deployment of my projects, such as the 'Diet Planer with AI' project, where I used GitHub Actions to automate testing and deployment of the web application.
+
+6. Q: How do you ensure that your GitHub repositories are secure and comply with industry standards? Can you provide an example from one of your projects?
+ A: To ensure that my GitHub repositories are secure and comply with industry standards, I follow best practices such as using strong passwords, enabling two-factor authentication, and regularly updating dependencies. For example, in my 'Diet Planer with AI' project, I used GitHub's built-in security features, such as secret scanning and dependency updates, to ensure that the repository was secure and up-to-date.
+
+7. Q: Can you describe your experience with GitHub Pages and how you have utilized it in your projects? Provide specific examples from your resume/profile.
+ A: I have been using GitHub Pages since my freelance data scientist days (Apr 2018 – Oct 2021), where I used GitHub Pages to host my personal website and showcase my projects. I have also used GitHub Pages to host documentation and guides for my projects, such as the 'Diet Planer with AI' project, where I used GitHub Pages to host documentation and guides for the web application.
+
+8. Q: How do you handle issues or bugs in your GitHub repository? Can you provide an example from one of your projects?
+ A: When handling issues or bugs in my GitHub repository, I use GitHub's built-in issue tracking features, such as issue creation and assignment, to track and resolve issues. For example, in my 'Diet Planer with AI' project, I had to resolve an issue with the web application's user interface. I created an issue on GitHub, assigned it to myself, and then resolved the issue by making changes to the code and pushing the updated code to the repository.
+
+9. Q: Can you describe your experience with GitHub's collaboration features, such as pull requests and code reviews? How do you utilize these features in your projects?
+ A: I have been using GitHub's collaboration features, such as pull requests and code reviews, since my current role as a Data Engineer at Alternative Path Pvt. Ltd. (Dec 2023 – present). I use these features to ensure that all team members are on the same page and to improve code quality. For example, in my 'Diet Planer with AI' project, I used pull requests and code reviews to ensure that the code was reviewed and approved by team members before it was merged into the main branch.
+
+10. Q: How do you ensure that your GitHub repositories are up-to-date and compliant with industry standards? Can you provide an example from one of your projects?
+ A: To ensure that my GitHub repositories are up-to-date and compliant with industry standards, I regularly update dependencies, use GitHub's built-in security features, and follow best practices such as using strong passwords and enabling two-factor authentication. For example, in my 'Diet Planer with AI' project, I regularly updated dependencies and used GitHub's built-in security features to ensure that the repository was secure and up-to-date.
+
+11. Q: Can you describe your experience with GitHub's API and how you have utilized it in your projects? Provide specific examples from your resume/profile.
+ A: I have been using GitHub's API since my freelance data scientist days (Apr 2018 – Oct 2021), where I used the API to retrieve data from GitHub repositories and integrate it into my projects. I have also used the API to automate tasks, such as creating new repositories and users, and to integrate GitHub with other services, such as Slack and Trello. For example, in my 'Diet Planer with AI' project, I used the GitHub API to retrieve data from the repository and integrate it into the web application.
+
+SHORT-ANSWER:
+1. Q: What is your experience with GitHub?
+ A: I have been actively using GitHub since my freelance data scientist days (Apr 2018 – Oct 2021), where I delivered 50+ ML projects and 300+ Python Selenium-based scraping jobs for businesses and researchers.
+
+2. Q: How do you ensure that your GitHub repositories are secure?
+ A: I follow best practices such as using strong passwords, enabling two-factor authentication, and regularly updating dependencies.
+
+3. Q: Can you describe your experience with GitHub Actions?
+ A: I have been using GitHub Actions since my current role as a Data Engineer at Alternative Path Pvt. Ltd. (Dec 2023 – present), where I have automated the distribution of processed data and insights to portfolio managers via email and S3 bucket integration.
+
+4. Q: How do you handle conflicts or merge issues when working on a GitHub repository with multiple contributors?
+ A: I use GitHub's built-in conflict resolution tools, such as the 'merge' and 'rebase' commands, to resolve conflicts and merge changes.
+
+5. Q: Can you describe your experience with GitHub Pages?
+ A: I have been using GitHub Pages since my freelance data scientist days (Apr 2018 – Oct 2021), where I used GitHub Pages to host my personal website and showcase my projects.
+
+6. Q: How do you ensure that your GitHub repositories are up-to-date and compliant with industry standards?
+ A: I regularly update dependencies, use GitHub's built-in security features, and follow best practices such as using strong passwords and enabling two-factor authentication.
+
+7. Q: Can you describe your experience with GitHub's API?
+ A: I have been using GitHub's API since my freelance data scientist days (Apr 2018 – Oct 2021), where I used the API to retrieve data from GitHub repositories and integrate it into my projects.
+
+8. Q: How do you handle issues or bugs in your GitHub repository?
+ A: I use GitHub's built-in issue tracking features, such as issue creation and assignment, to track and resolve issues.
+
+9. Q: Can you describe your experience with GitHub's collaboration features, such as pull requests and code reviews?
+ A: I have been using GitHub's collaboration features, such as pull requests and code reviews, since my current role as a Data Engineer at Alternative Path Pvt. Ltd. (Dec 2023 – present).
+
+10. Q: How do you ensure that your GitHub repositories are well-organized, readable, and maintainable?
+ A: I follow a consistent naming convention for folders and files, use clear and descriptive commit messages, and regularly refactor code to improve readability and maintainability.

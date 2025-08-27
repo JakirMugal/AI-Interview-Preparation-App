@@ -6,15 +6,16 @@ from core.prompts import TOPIC_TREE_PROMPT
 from core.splitter import chunk_text
 
 
-def get_topic_tree(resume_text: str) -> Dict:
+def get_topic_tree(resume_text: str, progress_callback=None) -> Dict:
     # If resume is long, split into chunks
     chunks = chunk_text(resume_text)
     merged_topics: Dict[str, List[str]] = {}
+    total = len(chunks)
 
-    for idx, ch in enumerate(chunks):
+    for idx, ch in enumerate(chunks, start=1):
         user = (
             TOPIC_TREE_PROMPT
-            + f"\n\nResume chunk (part {idx+1}/{len(chunks)}):\n"
+            + f"\n\nResume chunk (part {idx}/{total}):\n"
             + ch
         )
         raw = llm_client.run_prompt("You structure topics.", user)
@@ -27,6 +28,10 @@ def get_topic_tree(resume_text: str) -> Dict:
             for s in subs:
                 if s not in merged_topics[topic]:
                     merged_topics[topic].append(s)
+
+        # Report progress
+        if progress_callback:
+            progress_callback(int(idx / total * 100))
 
     # Convert dict → list schema
     return {

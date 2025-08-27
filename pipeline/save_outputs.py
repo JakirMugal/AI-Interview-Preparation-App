@@ -30,18 +30,23 @@ def save_qna(topic: str, subtopic: str, qna: Dict) -> Path:
     return out_path
 
 
-def save_all_qna(topic_tree: Dict, resume_text: str, qna_builder) -> None:
+def save_all_qna(topic_tree: Dict, resume_text: str, qna_builder, progress_callback=None) -> None:
     """
-    Save all QnA files for a given topic tree.
-
-    Args:
-        topic_tree (Dict): The topic → subtopics JSON
-        resume_text (str): Resume text context
-        qna_builder (Callable): Function that builds QnA JSON from (resume_text, unit_name)
+    Save all QnA files for a given topic tree with progress updates.
     """
+    subtopics = []
     for topic in topic_tree.get("topics", []):
-        t_name = topic.get("topic", "General")
         for sub in topic.get("subtopics", []):
+            subtopics.append((topic.get("topic", "General"), sub))
+
+    total = len(subtopics)
+    for idx, (t_name, sub) in enumerate(subtopics, start=1):
+        try:
             qna = qna_builder(resume_text, sub)
-            save_qna(t_name, sub, qna)
-            time.sleep(2)
+        except:
+            continue
+        save_qna(t_name, sub, qna)
+        time.sleep(0.5)  # throttle if needed
+
+        if progress_callback:
+            progress_callback(int(idx / total * 100))
