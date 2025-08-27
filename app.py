@@ -14,35 +14,63 @@ from config import OUTPUT_DIR
 
 
 # ---------------------------
-# Helper UI function
+# UI: Step Table
 # ---------------------------
-def render_step(container, name, status, progress, show_stop=False):
-    """Render one step row with progress bar + percentage + emoji + optional Stop button"""
-    with container:
-        col1, col2, col3, col4 = st.columns([2, 2, 5, 2])
-        with col1:
-            st.markdown(f"**{name}**")
-        with col2:
-            if status == "waiting":
-                st.markdown("⏳ Waiting")
-            elif status == "running":
-                st.markdown("🔄 Running")
-            elif status == "done":
-                st.markdown("✅ Done")
-            elif status == "stopped":
-                st.markdown("⏹ Stopped")
-        with col3:
-            st.progress(progress)
-        with col4:
-            if show_stop and status == "running":
-                if st.button("⏹ Stop", key="stop_btn"):
-                    st.session_state.stop_qna = True
+def init_step_table():
+    """Initialize placeholders for steps table (only once)."""
+    if "step_placeholders" not in st.session_state:
+        st.session_state.step_placeholders = {}
+
+        steps = ["Extracting Topics", "Clearing Old Outputs", "Saving QnA Files", "Creating ZIPs"]
+        for step in steps:
+            container = st.container()
+            col1, col2, col3, col4, col5 = container.columns([2, 2, 4, 1, 2])
+            with col1: st.markdown(f"**{step}**")
+            with col2: status = st.empty()
+            with col3: bar = st.progress(0)
+            with col4: pct = st.empty()
+            with col5: btn = st.empty()
+            st.session_state.step_placeholders[step] = {
+                "status": status,
+                "bar": bar,
+                "pct": pct,
+                "btn": btn,
+            }
 
 
+def update_step(step, status, progress, show_stop=False):
+    """Update row for a step."""
+    placeholders = st.session_state.step_placeholders[step]
+
+    # status text
+    if status == "waiting":
+        placeholders["status"].markdown("⏳ Waiting")
+    elif status == "running":
+        placeholders["status"].markdown("🔄 Running")
+    elif status == "done":
+        placeholders["status"].markdown("✅ Done")
+    elif status == "stopped":
+        placeholders["status"].markdown("⏹ Stopped")
+
+    # progress
+    placeholders["bar"].progress(progress)
+    placeholders["pct"].markdown(f"{progress}%")
+
+    # stop button only for QnA
+    if show_stop and status == "running":
+        if placeholders["btn"].button("⏹ Stop", key="stop_btn"):
+            st.session_state.stop_qna = True
+    else:
+        placeholders["btn"].empty()
+
+
+# ---------------------------
+# Main
+# ---------------------------
 def main():
     st.title("🤖 AI Interview Preparation")
 
-    # Initialize session state
+    # Initialize state
     if "resume_text" not in st.session_state:
         st.session_state.resume_text = None
     if "topic_tree" not in st.session_state:
@@ -61,7 +89,6 @@ def main():
     uploaded_file = st.file_uploader("Upload your Resume (txt/pdf/docx)", type=["txt", "pdf", "docx"])
 
     if uploaded_file and not st.session_state.resume_text:
-        # Save uploaded file to a temp dir
         with tempfile.TemporaryDirectory() as tmpdir:
             tmp_path = Path(tmpdir) / uploaded_file.name
             with open(tmp_path, "wb") as f:
@@ -75,34 +102,34 @@ def main():
         if st.button("Generate Questions") and not st.session_state.processing_done:
             st.info("Processing your resume… this may take a while.")
 
-            # Step placeholders
-            step_placeholders = [st.container() for _ in range(4)]
+            # init fixed table
+            init_step_table()
 
             # ---------------------------
             # STEP 1: Extract topics
             # ---------------------------
-            render_step(step_placeholders[0], "Extracting Topics", "running", 0)
+            update_step("Extracting Topics", "running", 0)
             topic_tree = get_topic_tree(
                 st.session_state.resume_text,
-                progress_callback=lambda pct: render_step(step_placeholders[0], "Extracting Topics", "running", pct),
+                progress_callback=lambda pct: update_step("Extracting Topics", "running", pct),
             )
-            topic_tree["topics"] = topic_tree["topics"][:1]  # test with 1 topic
+            topic_tree["topics"] = topic_tree["topics"][:1]  # sample topics
             st.session_state.topic_tree = topic_tree
-            render_step(step_placeholders[0], "Extracting Topics", "done", 100)
+            update_step("Extracting Topics", "done", 100)
 
             # ---------------------------
-            # STEP 2: Clear previous outputs
+            # STEP 2: Clear outputs
             # ---------------------------
-            render_step(step_placeholders[1], "Clearing Old Outputs", "running", 50)
+            update_step("Clearing Old Outputs", "running", 50)
             if OUTPUT_DIR.exists():
                 shutil.rmtree(OUTPUT_DIR)
             OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-            render_step(step_placeholders[1], "Clearing Old Outputs", "done", 100)
+            update_step("Clearing Old Outputs", "done", 100)
 
             # ---------------------------
-            # STEP 3: Generate QnA (with Stop button)
+            # STEP 3: Generate QnA
             # ---------------------------
-            render_step(step_placeholders[2], "Saving QnA Files", "running", 0, show_stop=True)
+            update_step("Saving QnA Files", "running", 0, show_stop=True)
 
             def stop_flag():
                 return st.session_state.stop_qna
@@ -111,8 +138,7 @@ def main():
                 topic_tree,
                 st.session_state.resume_text,
                 build_qna_json,
-                progress_callback=lambda pct: render_step(
-                    step_placeholders[2],
+                progress_callback=lambda pct: update_step(
                     "Saving QnA Files",
                     "running" if not st.session_state.stop_qna else "stopped",
                     pct,
@@ -122,20 +148,20 @@ def main():
             )
 
             if st.session_state.stop_qna:
-                render_step(step_placeholders[2], "Saving QnA Files", "stopped", 100)
+                update_step("Saving QnA Files", "stopped", 100)
             else:
-                render_step(step_placeholders[2], "Saving QnA Files", "done", 100)
+                update_step("Saving QnA Files", "done", 100)
 
             # ---------------------------
             # STEP 4: Zip results
             # ---------------------------
-            render_step(step_placeholders[3], "Creating ZIPs", "running", 30)
+            update_step("Creating ZIPs", "running", 30)
 
-            # create text zip
+            # text zip
             zip_text = zip_dir(Path(OUTPUT_DIR), Path("interview_qna_texts.zip"))
             st.session_state.zip_text = zip_text
 
-            # create audio dir + zip
+            # audio zip
             audio_dir = OUTPUT_DIR.parent / "audio_output"
             if audio_dir.exists():
                 shutil.rmtree(audio_dir)
@@ -145,7 +171,7 @@ def main():
             zip_audio = zip_dir(Path(audio_dir), Path("interview_qna_audio.zip"))
             st.session_state.zip_audio = zip_audio
 
-            # create both zip
+            # both zip
             both_dir = OUTPUT_DIR.parent / "both_output"
             if both_dir.exists():
                 shutil.rmtree(both_dir)
@@ -155,13 +181,12 @@ def main():
             zip_both = zip_dir(both_dir, Path("interview_qna_texts_and_audio.zip"))
             st.session_state.zip_both = zip_both
 
-            render_step(step_placeholders[3], "Creating ZIPs", "done", 100)
+            update_step("Creating ZIPs", "done", 100)
 
-            # mark pipeline done
             st.session_state.processing_done = True
 
         # ---------------------------
-        # Show download buttons
+        # Downloads
         # ---------------------------
         if st.session_state.processing_done:
             st.success("✅ All questions generated!")
