@@ -2,7 +2,6 @@ import streamlit as st
 from pathlib import Path
 import tempfile
 import shutil
-import time
 
 from io_utils.text_extract import extract_text_any
 from pipeline.topic_extraction import get_topic_tree
@@ -15,46 +14,35 @@ from config import OUTPUT_DIR
 
 
 # ---------------------------
-# UI helpers
+# Helper UI function
 # ---------------------------
-class StepRow:
-    def __init__(self, placeholder, name):
-        self.placeholder = placeholder
-        self.name = name
-        self.progress = 0
-        self.status = "waiting"
-
-    def update(self, status, progress=None):
-        if progress is not None:
-            self.progress = progress
-        self.status = status
-        self.render()
-
-    def render(self):
-        with self.placeholder:
-            st.markdown(f"**{self.name}**")
-            col1, col2 = st.columns([3, 7])
-            with col1:
-                if self.status == "waiting":
-                    st.markdown("⏳ Waiting")
-                elif self.status == "running":
-                    st.markdown("🔄 Running")
-                elif self.status == "done":
-                    st.markdown("✅ Done")
-                elif self.status == "stopped":
-                    st.markdown("⏹ Stopped")
-            with col2:
-                st.progress(self.progress)
-                st.markdown(f"{self.progress}%")
+def render_step(container, name, status, progress, show_stop=False):
+    """Render one step row with progress bar + percentage + emoji + optional Stop button"""
+    with container:
+        col1, col2, col3, col4 = st.columns([2, 2, 5, 2])
+        with col1:
+            st.markdown(f"**{name}**")
+        with col2:
+            if status == "waiting":
+                st.markdown("⏳ Waiting")
+            elif status == "running":
+                st.markdown("🔄 Running")
+            elif status == "done":
+                st.markdown("✅ Done")
+            elif status == "stopped":
+                st.markdown("⏹ Stopped")
+        with col3:
+            st.progress(progress)
+        with col4:
+            if show_stop and status == "running":
+                if st.button("⏹ Stop", key="stop_btn"):
+                    st.session_state.stop_qna = True
 
 
-# ---------------------------
-# Main App
-# ---------------------------
 def main():
     st.title("🤖 AI Interview Preparation")
 
-    # --- session state ---
+    # Initialize session state
     if "resume_text" not in st.session_state:
         st.session_state.resume_text = None
     if "topic_tree" not in st.session_state:
@@ -87,49 +75,34 @@ def main():
         if st.button("Generate Questions") and not st.session_state.processing_done:
             st.info("Processing your resume… this may take a while.")
 
-            # --- define steps ---
-            steps = [
-                {"name": "Extracting Topics"},
-                {"name": "Clearing Old Outputs"},
-                {"name": "Saving QnA Files"},
-                {"name": "Creating ZIPs"},
-            ]
-            step_rows = [StepRow(st.container(), s["name"]) for s in steps]
+            # Step placeholders
+            step_placeholders = [st.container() for _ in range(4)]
 
             # ---------------------------
             # STEP 1: Extract topics
             # ---------------------------
-            idx = 0
-            step_rows[idx].update("running", 10)
+            render_step(step_placeholders[0], "Extracting Topics", "running", 0)
             topic_tree = get_topic_tree(
                 st.session_state.resume_text,
-                progress_callback=lambda pct: step_rows[idx].update("running", pct),
+                progress_callback=lambda pct: render_step(step_placeholders[0], "Extracting Topics", "running", pct),
             )
-            # for testing we keep only 1 topic
-            topic_tree["topics"] = topic_tree["topics"][:1]
+            topic_tree["topics"] = topic_tree["topics"][:1]  # test with 1 topic
             st.session_state.topic_tree = topic_tree
-            step_rows[idx].update("done", 100)
+            render_step(step_placeholders[0], "Extracting Topics", "done", 100)
 
             # ---------------------------
             # STEP 2: Clear previous outputs
             # ---------------------------
-            idx = 1
-            step_rows[idx].update("running", 50)
+            render_step(step_placeholders[1], "Clearing Old Outputs", "running", 50)
             if OUTPUT_DIR.exists():
                 shutil.rmtree(OUTPUT_DIR)
             OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
-            step_rows[idx].update("done", 100)
+            render_step(step_placeholders[1], "Clearing Old Outputs", "done", 100)
 
             # ---------------------------
             # STEP 3: Generate QnA (with Stop button)
             # ---------------------------
-            idx = 2
-            step_rows[idx].update("running", 0)
-
-            stop_col = st.empty()
-            with stop_col.container():
-                if st.button("⏹ Stop QnA Generation"):
-                    st.session_state.stop_qna = True
+            render_step(step_placeholders[2], "Saving QnA Files", "running", 0, show_stop=True)
 
             def stop_flag():
                 return st.session_state.stop_qna
@@ -138,22 +111,25 @@ def main():
                 topic_tree,
                 st.session_state.resume_text,
                 build_qna_json,
-                progress_callback=lambda pct: step_rows[idx].update("running", pct),
+                progress_callback=lambda pct: render_step(
+                    step_placeholders[2],
+                    "Saving QnA Files",
+                    "running" if not st.session_state.stop_qna else "stopped",
+                    pct,
+                    show_stop=True,
+                ),
                 stop_flag=stop_flag,
             )
 
             if st.session_state.stop_qna:
-                step_rows[idx].update("stopped", step_rows[idx].progress)
+                render_step(step_placeholders[2], "Saving QnA Files", "stopped", 100)
             else:
-                step_rows[idx].update("done", 100)
-
-            stop_col.empty()  # remove stop button
+                render_step(step_placeholders[2], "Saving QnA Files", "done", 100)
 
             # ---------------------------
             # STEP 4: Zip results
             # ---------------------------
-            idx = 3
-            step_rows[idx].update("running", 30)
+            render_step(step_placeholders[3], "Creating ZIPs", "running", 30)
 
             # create text zip
             zip_text = zip_dir(Path(OUTPUT_DIR), Path("interview_qna_texts.zip"))
@@ -179,7 +155,7 @@ def main():
             zip_both = zip_dir(both_dir, Path("interview_qna_texts_and_audio.zip"))
             st.session_state.zip_both = zip_both
 
-            step_rows[idx].update("done", 100)
+            render_step(step_placeholders[3], "Creating ZIPs", "done", 100)
 
             # mark pipeline done
             st.session_state.processing_done = True
