@@ -30,23 +30,41 @@ def save_qna(topic: str, subtopic: str, qna: Dict) -> Path:
     return out_path
 
 
-def save_all_qna(topic_tree: Dict, resume_text: str, qna_builder, progress_callback=None) -> None:
+def save_all_qna(topic_tree, resume_text, qna_builder, progress_callback=None, stop_flag=None) -> None:
     """
-    Save all QnA files for a given topic tree with progress updates.
+    Save all QnA files for a given topic tree.
+
+    Args:
+        topic_tree (Dict): The topic → subtopics JSON
+        resume_text (str): Resume text context
+        qna_builder (Callable): Function that builds QnA JSON from (resume_text, unit_name)
+        progress_callback (Callable, optional): Function to report progress percentage
+        stop_flag (Callable, optional): Function that returns True if the process should stop
     """
-    subtopics = []
-    for topic in topic_tree.get("topics", []):
+    topics = topic_tree.get("topics", [])
+    total_subs = sum(len(t.get("subtopics", [])) for t in topics)
+    done = 0
+
+    for topic in topics:
+        t_name = topic.get("topic", "General")
+
         for sub in topic.get("subtopics", []):
-            subtopics.append((topic.get("topic", "General"), sub))
+            # --- check stop flag ---
+            if stop_flag and stop_flag():
+                print("⏹ QnA generation stopped by user")
+                return  # exit early, keep already generated files
 
-    total = len(subtopics)
-    for idx, (t_name, sub) in enumerate(subtopics, start=1):
-        try:
-            qna = qna_builder(resume_text, sub)
-        except:
-            continue
-        save_qna(t_name, sub, qna)
-        time.sleep(0.5)  # throttle if needed
+            # --- generate QnA ---
+            try:
+                qna = qna_builder(resume_text, sub)
+                save_qna(t_name, sub, qna)
+            except Exception as e:
+                print(f"⚠️ Failed to build QnA for {t_name} → {sub}: {e}")
 
-        if progress_callback:
-            progress_callback(int(idx / total * 100))
+            # --- update progress ---
+            done += 1
+            pct = int((done / total_subs) * 100)
+            if progress_callback:
+                progress_callback(pct)
+
+            time.sleep(0.5)  # small delay to simulate work / avoid overload
